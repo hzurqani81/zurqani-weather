@@ -504,73 +504,106 @@
   }
 
   // Generic tooltip helpers (works for both charts)
-  function attachTooltipToCanvas(canvas, tipEl, getStateFn, formatHtmlFn, hitRadius){
-    if (!canvas || !tipEl) return;
+function attachTooltipToCanvas(canvas, tipEl, getStateFn, formatHtmlFn, hitRadius){
+  if (!canvas || !tipEl) return;
 
-    function showTip(pt, clientX, clientY){
-      tipEl.style.display = "block";
-      tipEl.innerHTML = formatHtmlFn(pt);
+  function hideTip(){ tipEl.style.display = "none"; }
 
-      var wrap = tipEl.parentElement; // must be positioned relative
-      var rect = wrap.getBoundingClientRect();
-      tipEl.style.left = (clientX - rect.left) + "px";
-      tipEl.style.top  = (clientY - rect.top) + "px";
-    }
+  function nearestPoint(clientX, clientY){
+    var rect = canvas.getBoundingClientRect();
+    var x = clientX - rect.left;
+    var y = clientY - rect.top;
 
-    function hideTip(){
-      tipEl.style.display = "none";
-    }
+    var state = getStateFn();
+    var pts = (state && state.points) ? state.points : [];
 
-    function nearestPoint(clientX, clientY){
-      var rect = canvas.getBoundingClientRect();
-      var x = clientX - rect.left;
-      var y = clientY - rect.top;
+    var best = null;
+    var bestD = Infinity;
+    var R = hitRadius || 12;
 
-      var state = getStateFn();
-      var pts = (state && state.points) ? state.points : [];
-
-      var best = null;
-      var bestD = Infinity;
-      var R = hitRadius || 12;
-
-      pts.forEach(function(pt){
-        var dx = pt.x - x;
-        var dy = pt.y - y;
-        var d = Math.sqrt(dx*dx + dy*dy);
-        if (d < bestD){
-          bestD = d;
-          best = pt;
-        }
-      });
-
-      if (best && bestD <= R) return best;
-      return null;
-    }
-
-    canvas.addEventListener("mousemove", function(e){
-      var pt = nearestPoint(e.clientX, e.clientY);
-      if (pt) showTip(pt, e.clientX, e.clientY);
-      else hideTip();
+    pts.forEach(function(pt){
+      var dx = pt.x - x;
+      var dy = pt.y - y;
+      var d = Math.sqrt(dx*dx + dy*dy);
+      if (d < bestD){ bestD = d; best = pt; }
     });
-    canvas.addEventListener("mouseleave", hideTip);
 
-    canvas.addEventListener("touchstart", function(e){
-      if (!e.touches || !e.touches[0]) return;
-      var t = e.touches[0];
-      var pt = nearestPoint(t.clientX, t.clientY);
-      if (pt) showTip(pt, t.clientX, t.clientY);
-    }, { passive: true });
-
-    canvas.addEventListener("touchmove", function(e){
-      if (!e.touches || !e.touches[0]) return;
-      var t = e.touches[0];
-      var pt = nearestPoint(t.clientX, t.clientY);
-      if (pt) showTip(pt, t.clientX, t.clientY);
-      else hideTip();
-    }, { passive: true });
-
-    canvas.addEventListener("touchend", hideTip, { passive: true });
+    if (best && bestD <= R) return best;
+    return null;
   }
+
+  function showTip(pt, clientX, clientY){
+    tipEl.innerHTML = formatHtmlFn(pt);
+    tipEl.style.display = "block";
+
+    // We position relative to a wrapper that should be position:relative
+    var wrap = tipEl.parentElement;
+    var wrapRect = wrap.getBoundingClientRect();
+    var canvasRect = canvas.getBoundingClientRect();
+
+    // pointer position inside the WRAP (CSS pixels)
+    var x = clientX - wrapRect.left;
+    var y = clientY - wrapRect.top;
+
+    // Temporarily remove transform so we can measure actual size
+    tipEl.style.transform = "none";
+
+    // Force layout so offsetWidth/Height is correct
+    var tw = tipEl.offsetWidth;
+    var th = tipEl.offsetHeight;
+
+    // Decide above vs below:
+    // If the point is close to the top of the canvas, put tooltip BELOW
+    // (canvas top in wrap coords is canvasRect.top - wrapRect.top)
+    var canvasTopInWrap = canvasRect.top - wrapRect.top;
+    var yInCanvas = clientY - canvasRect.top; // inside canvas
+    var placeBelow = (yInCanvas < 28);        // threshold (tweak if you want)
+
+    // Base placement
+    var top = placeBelow ? (y + 14) : (y - 14 - th);
+    var left = x - (tw / 2);
+
+    // Keep inside left/right bounds of wrap (8px padding)
+    var pad = 8;
+    if (left < pad) left = pad;
+    if (left + tw > wrapRect.width - pad) left = wrapRect.width - pad - tw;
+
+    // Keep inside top/bottom bounds too
+    if (top < pad) top = pad;
+    if (top + th > wrapRect.height - pad) top = wrapRect.height - pad - th;
+
+    tipEl.style.left = left + "px";
+    tipEl.style.top = top + "px";
+
+    // Restore transform look (small lift only when above)
+    tipEl.style.transform = placeBelow ? "translate(0,0)" : "translate(0,0)";
+  }
+
+  canvas.addEventListener("mousemove", function(e){
+    var pt = nearestPoint(e.clientX, e.clientY);
+    if (pt) showTip(pt, e.clientX, e.clientY);
+    else hideTip();
+  });
+  canvas.addEventListener("mouseleave", hideTip);
+
+  // touch
+  canvas.addEventListener("touchstart", function(e){
+    if (!e.touches || !e.touches[0]) return;
+    var t = e.touches[0];
+    var pt = nearestPoint(t.clientX, t.clientY);
+    if (pt) showTip(pt, t.clientX, t.clientY);
+  }, { passive: true });
+
+  canvas.addEventListener("touchmove", function(e){
+    if (!e.touches || !e.touches[0]) return;
+    var t = e.touches[0];
+    var pt = nearestPoint(t.clientX, t.clientY);
+    if (pt) showTip(pt, t.clientX, t.clientY);
+    else hideTip();
+  }, { passive: true });
+
+  canvas.addEventListener("touchend", hideTip, { passive: true });
+}
 
   fetch(WEATHER_JSON_URL, { cache: "no-store" })
     .then(function(r){
