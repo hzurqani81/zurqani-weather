@@ -4,85 +4,154 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Campus Weather</title>
+
   <style>
-    body { font-family: system-ui, Arial, sans-serif; margin: 0; }
-    .card { border:1px solid #ddd; border-radius:14px; padding:14px; max-width:720px; }
-    .title { font-size:18px; font-weight:700; }
-    .muted { opacity: .75; font-size: 12px; margin-top: 8px; }
-    table { width:100%; border-collapse:collapse; margin-top:10px; font-size:13px; }
-    th, td { padding:6px 8px; border-bottom:1px solid #eee; }
-    th { text-align:left; }
-    td.r, th.r { text-align:right; }
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      margin: 0;
+      background: transparent;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 16px;
+      padding: 16px;
+      max-width: 720px;
+      background: #f5f4ef;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .now {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+    .muted {
+      opacity: .75;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #e2e2e2;
+    }
+    th {
+      text-align: left;
+      font-weight: 600;
+    }
+    td.r, th.r {
+      text-align: right;
+    }
+    .icon {
+      font-size: 18px;
+      margin-right: 4px;
+    }
   </style>
 </head>
+
 <body>
   <div class="card">
     <div class="title">Campus Weather</div>
-    <div id="status" style="margin-top:8px;">Loading…</div>
-    <div id="current" style="margin-top:10px;"></div>
+    <div id="status">Loading…</div>
+    <div id="current"></div>
     <div id="forecast"></div>
     <div id="updated" class="muted"></div>
   </div>
 
 <script>
 (function(){
-  // IMPORTANT: weather.json must be in the SAME repo/Pages site
+  // weather.json must be in the same GitHub Pages site
   var WEATHER_JSON_URL = "./weather.json";
 
-  function cToF(c){ return (c*9/5)+32; }
-  function safe(v){ return (v===null || v===undefined) ? "—" : v; }
+  function cToF(c){ return (c * 9 / 5) + 32; }
+  function safe(v){ return (v === null || v === undefined) ? "—" : v; }
+
+  function icon(code){
+    if (code === 0) return "☀️";
+    if (code === 1 || code === 2) return "🌤️";
+    if (code === 3) return "☁️";
+    if (code >= 45 && code <= 48) return "🌫️";
+    if (code >= 51 && code <= 57) return "🌦️";
+    if (code >= 61 && code <= 67) return "🌧️";
+    if (code >= 71 && code <= 77) return "❄️";
+    if (code >= 80 && code <= 82) return "🌦️";
+    if (code >= 95) return "⛈️";
+    return "🌥️";
+  }
+
   function label(code){
-    if (code===0) return "Clear";
-    if (code===1||code===2) return "Mostly clear";
-    if (code===3) return "Cloudy";
-    if (code>=45&&code<=48) return "Fog";
-    if (code>=61&&code<=67) return "Rain";
-    if (code>=71&&code<=77) return "Snow";
-    if (code>=80&&code<=82) return "Showers";
-    if (code>=95) return "Thunderstorm";
+    if (code === 0) return "Clear";
+    if (code === 1 || code === 2) return "Mostly clear";
+    if (code === 3) return "Cloudy";
+    if (code >= 45 && code <= 48) return "Fog";
+    if (code >= 51 && code <= 57) return "Drizzle";
+    if (code >= 61 && code <= 67) return "Rain";
+    if (code >= 71 && code <= 77) return "Snow";
+    if (code >= 80 && code <= 82) return "Showers";
+    if (code >= 95) return "Thunderstorm";
     return "Mixed";
   }
 
-  fetch(WEATHER_JSON_URL, {cache:"no-store"})
-    .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+  fetch(WEATHER_JSON_URL, { cache: "no-store" })
+    .then(function(r){
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    })
     .then(function(data){
       document.getElementById("status").textContent = "";
 
       var cur = data.current || {};
-      var meta = data.meta || {};
       var daily = data.daily || [];
+      var meta = data.meta || {};
 
       var tC = cur.temperature_c;
-      var tF = (tC==null) ? null : cToF(tC);
+      var tF = (tC == null) ? null : cToF(tC);
 
       document.getElementById("current").innerHTML =
-        "<div><strong>Now:</strong> " + safe(tF==null?null:tF.toFixed(1)) + "°F"
-        + " (" + safe(tC==null?null:tC.toFixed(1)) + "°C)"
-        + " • " + label(cur.weather_code) + "</div>"
-        + "<div>Humidity: " + safe(cur.humidity_pct) + "% • Wind: " + safe(cur.wind_speed_kmh) + " km/h</div>";
+        "<div class='now'><span class='icon'>" + icon(cur.weather_code) + "</span>" +
+        "<strong>Now:</strong> " +
+        safe(tF == null ? null : tF.toFixed(1)) + "°F" +
+        " (" + safe(tC == null ? null : tC.toFixed(1)) + "°C)" +
+        " • " + label(cur.weather_code) + "</div>" +
+        "<div>Humidity: " + safe(cur.humidity_pct) +
+        "% • Wind: " + safe(cur.wind_speed_kmh) + " km/h</div>";
 
       var rows = daily.slice(0,7).map(function(d){
-        var maxF = (d.tmax_c==null)?null:cToF(d.tmax_c);
-        var minF = (d.tmin_c==null)?null:cToF(d.tmin_c);
-        return "<tr>"
-          + "<td>"+safe(d.date)+"</td>"
-          + "<td>"+label(d.weather_code)+"</td>"
-          + "<td class='r'>"+safe(maxF==null?null:maxF.toFixed(0))+" / "+safe(minF==null?null:minF.toFixed(0))+"°F</td>"
-          + "<td class='r'>"+safe(d.precip_prob_pct)+"%</td>"
-          + "</tr>";
+        var maxF = (d.tmax_c == null) ? null : cToF(d.tmax_c);
+        var minF = (d.tmin_c == null) ? null : cToF(d.tmin_c);
+
+        return "<tr>" +
+          "<td>" + safe(d.date) + "</td>" +
+          "<td><span class='icon'>" + icon(d.weather_code) + "</span>" +
+          label(d.weather_code) + "</td>" +
+          "<td class='r'>" +
+          safe(maxF == null ? null : maxF.toFixed(0)) + " / " +
+          safe(minF == null ? null : minF.toFixed(0)) + "°F</td>" +
+          "<td class='r'>" + safe(d.precip_prob_pct) + "%</td>" +
+          "</tr>";
       }).join("");
 
       document.getElementById("forecast").innerHTML =
-        "<div style='font-weight:700; margin-top:10px;'>7-Day Forecast</div>"
-        + "<table><thead><tr><th>Date</th><th>Condition</th><th class='r'>High/Low</th><th class='r'>Precip</th></tr></thead>"
-        + "<tbody>"+rows+"</tbody></table>";
+        "<div style='font-weight:700; margin-top:10px;'>7-Day Forecast</div>" +
+        "<table><thead><tr>" +
+        "<th>Date</th><th>Condition</th>" +
+        "<th class='r'>High / Low</th><th class='r'>Precip</th>" +
+        "</tr></thead><tbody>" + rows + "</tbody></table>";
 
       document.getElementById("updated").textContent =
-        "Updated (UTC): " + safe(meta.generated_utc) + " • Source: " + safe(meta.source);
+        "Updated (UTC): " + safe(meta.generated_utc) +
+        " • Source: " + safe(meta.source);
     })
     .catch(function(e){
       document.getElementById("status").textContent =
-        "Weather unavailable ("+e.message+").";
+        "Weather unavailable (" + e.message + ")";
     });
 })();
 </script>
