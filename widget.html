@@ -91,6 +91,7 @@
       line-height: 1.25;
       margin-bottom: 4px;
     }
+
     .nowMeta{
       font-size: 13px;
       color: var(--muted);
@@ -98,6 +99,14 @@
       display:flex;
       flex-wrap: wrap;
       gap: 10px;
+    }
+
+    /* Small helper line to explain daily vs current */
+    .todayHint{
+      margin-top: 4px;
+      font-size: 12px;
+      color: rgba(0,0,0,.55);
+      font-weight: 650;
     }
 
     .sparkWrap{
@@ -283,7 +292,7 @@
     return txt.slice(0, n - 1) + "…";
   }
 
-  // ✅ Timezone-correct "today" date based on the LOCATION timezone (not your computer timezone)
+  // Use the LOCATION timezone (meta.timezone) to compute "today"
   function isoDateInTimeZone(tz){
     try{
       var parts = new Intl.DateTimeFormat("en-CA", {
@@ -323,7 +332,7 @@
     function x(i){ return (i/(values.length-1)) * (w-10) + 5; }
     function y(v){ return (h-8) - ((v-min)/(max-min))*(h-16) + 4; }
 
-    // Line
+    // line
     ctx.beginPath();
     values.forEach(function(v,i){
       if (v == null) return;
@@ -335,7 +344,7 @@
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Points
+    // points
     values.forEach(function(v,i){
       if (v == null) return;
       ctx.beginPath();
@@ -359,12 +368,24 @@
 
       document.getElementById("locPill").textContent = meta.place_name || "Location";
 
+      var tz = meta.timezone || "UTC";
+      var today = isoDateInTimeZone(tz);
+
+      var todayDaily = daily && daily.length ? daily[0] : null;
+
       var tC = cur.temperature_c;
       var tF = (tC == null) ? null : cToF(tC);
       var feelsC = cur.feels_like_c;
       var feelsF = (feelsC == null) ? null : cToF(feelsC);
 
-      // ✅ show true NOW condition from current.weather_code
+      // Show TRUE NOW condition from current.weather_code
+      // And show "Today:" (daily[0]) to explain why it can differ.
+      var todayHintHtml = "";
+      if (todayDaily && todayDaily.weather_code != null){
+        todayHintHtml =
+          "<div class='todayHint'>Today: " + label(todayDaily.weather_code) + " (daily forecast)</div>";
+      }
+
       var nowHtml =
         "<div class='nowRow'>" +
           "<div class='bigIcon' aria-hidden='true'>" + icon(cur.weather_code) + "</div>" +
@@ -378,6 +399,7 @@
               "<span>Wind: <strong>" + safe(cur.wind_speed_kmh) + " km/h</strong></span>" +
               "<span>Feels like: <strong>" + safe(feelsF==null?null:feelsF.toFixed(1)) + "°F</strong></span>" +
             "</div>" +
+            todayHintHtml +
           "</div>" +
           "<div class='sparkWrap'>" +
             "<div class='sparkLabel'>Daily highs (°F)</div>" +
@@ -386,10 +408,6 @@
         "</div>";
 
       document.getElementById("nowBlock").innerHTML = nowHtml;
-
-      // ✅ Use location timezone from weather.json meta if available
-      var tz = meta.timezone || meta.timezone_name || "UTC";
-      var today = isoDateInTimeZone(tz);
 
       var rows = daily.slice(0,7).map(function(d){
         var maxF = (d.tmax_c==null)?null:cToF(d.tmax_c);
