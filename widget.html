@@ -6,125 +6,247 @@
   <title>Campus Weather</title>
 
   <style>
-    body { font-family: system-ui, Arial, sans-serif; margin: 0; background: transparent; }
-
-    .card {
-      border: 1px solid #ddd;
-      border-radius: 18px;
-      padding: 16px;
-      max-width: 760px;
-      background: #f5f4ef;
+    :root{
+      --card-bg: #f5f4ef;
+      --border: rgba(0,0,0,.10);
+      --text: #111;
+      --muted: rgba(0,0,0,.65);
+      --muted2: rgba(0,0,0,.45);
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --radius: 18px;
     }
 
-    .title {
-      font-size: 20px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
+    html, body { margin:0; padding:0; background: transparent; color: var(--text); font-family: system-ui, Arial, sans-serif; }
+
+    .card{
+      width:100%;
+      max-width: 860px;
+      box-sizing: border-box;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+    }
+
+    .header{
+      display:flex;
+      align-items:flex-start;
       justify-content: space-between;
       gap: 12px;
+      margin-bottom: 10px;
     }
 
-    .pill {
+    .titleWrap{ display:flex; flex-direction: column; gap: 4px; }
+    .title{
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: .2px;
+    }
+    .subtitle{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pill{
       font-size: 12px;
       padding: 4px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(0,0,0,.12);
-      opacity: .9;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.6);
       white-space: nowrap;
+      font-weight: 650;
+      color: rgba(0,0,0,.75);
     }
 
-    .now {
+    .status{ font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+    .nowRow{
+      display:flex;
+      align-items: center;
+      gap: 12px;
       margin-top: 10px;
-      font-size: 16px;
-      font-weight: 600;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255,255,255,.55);
     }
 
-    .sub {
-      margin-top: 6px;
-      font-size: 13px;
-      opacity: .9;
-    }
-
-    .muted {
-      opacity: .75;
-      font-size: 12px;
-      margin-top: 10px;
-    }
-
-    .icon { font-size: 18px; margin-right: 6px; }
-
-    .sectionTitle {
-      font-weight: 800;
-      margin-top: 12px;
-      margin-bottom: 8px;
-    }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
-    th, td { padding: 7px 8px; border-bottom: 1px solid rgba(0,0,0,.08); }
-    th { text-align: left; font-weight: 700; opacity: .9; }
-    td.r, th.r { text-align: right; }
-
-    /* Alerts */
-    .alerts {
-      display: none;
-      margin-top: 12px;
+    .bigIcon{
+      width: 52px;
+      height: 52px;
+      display:grid;
+      place-items:center;
+      font-size: 30px;
       border-radius: 14px;
+      background: rgba(0,0,0,.04);
+      border: 1px solid rgba(0,0,0,.06);
+      flex: 0 0 auto;
+    }
+
+    .nowMain{ flex: 1 1 auto; min-width: 0; }
+    .nowLine{
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+    .nowMeta{
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.3;
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .sparkWrap{
+      flex: 0 0 170px;
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+    }
+    .sparkLabel{
+      font-size: 12px;
+      color: var(--muted2);
+      font-weight: 700;
+    }
+    canvas{ display:block; }
+
+    .alerts{
+      display:none;
+      margin-top: 12px;
+      border-radius: 16px;
       padding: 12px;
       border: 1px solid rgba(0,0,0,.12);
-      background: rgba(255, 235, 59, 0.18); /* soft yellow */
+      background: rgba(255, 235, 59, 0.18);
     }
-    .alerts .hdr {
+    .alerts .hdr{
       font-weight: 900;
-      display: flex;
-      align-items: center;
+      display:flex;
+      align-items:center;
       gap: 8px;
       margin-bottom: 6px;
     }
-    .alertItem {
+    .alertItem{
       margin-top: 8px;
       padding-top: 8px;
       border-top: 1px dashed rgba(0,0,0,.18);
     }
-    .alertName { font-weight: 800; }
-    .alertMeta { font-size: 12px; opacity: .85; margin-top: 2px; }
-    .alertDesc { font-size: 13px; margin-top: 6px; line-height: 1.35; }
+    .alertName{ font-weight: 800; }
+    .alertMeta{ font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .alertDesc{ font-size: 13px; margin-top: 6px; line-height: 1.35; color: rgba(0,0,0,.85); }
 
-    /* Themes (simple, pleasant) */
-    .theme-sunny { background: #fff7e6; }
-    .theme-cloudy { background: #f2f4f7; }
-    .theme-rain { background: #eef6ff; }
-    .theme-snow { background: #f6fbff; }
-    .theme-fog { background: #f3f3f3; }
-    .theme-storm { background: #f3f0ff; }
+    .sectionTitle{
+      font-weight: 900;
+      margin-top: 14px;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    table{
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: rgba(255,255,255,.35);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    thead th{
+      text-align:left;
+      font-weight: 800;
+      color: rgba(0,0,0,.75);
+      background: rgba(0,0,0,.03);
+      padding: 10px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    tbody td{
+      padding: 9px 10px;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      vertical-align: middle;
+    }
+    tbody tr:last-child td{ border-bottom: none; }
+    .r{ text-align:right; }
+    .cond{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .cond .sIcon{ font-size: 16px; }
+
+    tbody tr.today{
+      background: rgba(0,0,0,.04);
+    }
+    tbody tr.today td{
+      font-weight: 700;
+    }
+
+    .footer{
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    .disclaimer{
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.35;
+    }
+
+    .theme-sunny{ --card-bg:#fff7e6; }
+    .theme-cloudy{ --card-bg:#f2f4f7; }
+    .theme-rain{ --card-bg:#eef6ff; }
+    .theme-snow{ --card-bg:#f6fbff; }
+    .theme-fog{ --card-bg:#f3f3f3; }
+    .theme-storm{ --card-bg:#f3f0ff; }
   </style>
 </head>
 
 <body>
   <div id="card" class="card">
-    <div class="title">
-      <div>Campus Weather</div>
-      <div id="locPill" class="pill">Monticello, AR</div>
+    <div class="header">
+      <div class="titleWrap">
+        <div class="title">Campus Weather</div>
+        <div class="subtitle">Model-based conditions & forecast (Open-Meteo)</div>
+      </div>
+      <div id="locPill" class="pill">Loading…</div>
     </div>
 
-    <div id="status" class="muted">Loading…</div>
+    <div id="status" class="status">Loading…</div>
 
     <div id="alerts" class="alerts">
       <div class="hdr">🚨 Weather Alerts</div>
       <div id="alertsBody"></div>
     </div>
 
-    <div id="current"></div>
+    <div id="nowBlock"></div>
+
+    <div class="sectionTitle">7-Day Forecast</div>
     <div id="forecast"></div>
-    <div id="updated" class="muted"></div>
+
+    <div class="footer">
+      <div id="updated"></div>
+      <div id="source"></div>
+    </div>
+
+    <div class="disclaimer">
+      Note: Values may differ from consumer weather apps because this widget uses numerical weather model outputs rather than proprietary station-blended nowcasts.
+    </div>
   </div>
 
 <script>
 (function(){
-  // Uses your GitHub Pages weather.json (same folder)
   var WEATHER_JSON_URL = "./weather.json";
 
-  // NWS alerts point for Monticello, AR (keep matching your fetch_weather.py location)
+  // Alerts point (keep in sync with fetch_weather.py)
   var ALERT_LAT = 33.6289;
   var ALERT_LON = -91.7909;
 
@@ -169,7 +291,6 @@
 
   function fmtTime(s){
     if (!s) return "—";
-    // NWS returns ISO timestamps; display just date/time
     return String(s).replace("T"," ").replace(/\+.*$/,"").replace("Z","");
   }
 
@@ -179,7 +300,63 @@
     return txt.slice(0, n - 1) + "…";
   }
 
-  // 1) Load your weather.json (Open-Meteo data)
+  function isoDateLocal(){
+    var d = new Date();
+    var y = d.getFullYear();
+    var m = String(d.getMonth()+1).padStart(2,"0");
+    var day = String(d.getDate()).padStart(2,"0");
+    return y + "-" + m + "-" + day;
+  }
+
+  function drawSparkline(canvas, values){
+    var ctx = canvas.getContext("2d");
+    var w = canvas.width, h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+
+    if (!values || values.length < 2) return;
+
+    var min = Infinity, max = -Infinity;
+    for (var i=0;i<values.length;i++){
+      var v = values[i];
+      if (v == null) continue;
+      if (v < min) min = v;
+      if (v > max) max = v;
+    }
+    if (!isFinite(min) || !isFinite(max) || min === max) { min = min - 1; max = max + 1; }
+
+    function x(i){ return (i/(values.length-1)) * (w-2) + 1; }
+    function y(v){ return (h-2) - ((v-min)/(max-min))*(h-4) + 1; }
+
+    ctx.globalAlpha = 0.18;
+    ctx.beginPath();
+    ctx.moveTo(1, h-2);
+    ctx.lineTo(w-1, h-2);
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.globalAlpha = 0.85;
+    ctx.beginPath();
+    for (var j=0;j<values.length;j++){
+      var vv = values[j];
+      if (vv == null) continue;
+      var px = x(j), py = y(vv);
+      if (j === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    var last = values[values.length-1];
+    if (last != null){
+      ctx.beginPath();
+      ctx.arc(x(values.length-1), y(last), 3, 0, Math.PI*2);
+      ctx.fillStyle = "#000";
+      ctx.fill();
+    }
+  }
+
   fetch(WEATHER_JSON_URL, { cache: "no-store" })
     .then(function(r){
       if (!r.ok) throw new Error("HTTP " + r.status);
@@ -192,50 +369,74 @@
       var daily = data.daily || [];
       var meta = data.meta || {};
 
-      // Theme
+      document.getElementById("locPill").textContent = meta.place_name || "Location";
+
       var card = document.getElementById("card");
       card.classList.add(themeClass(cur.weather_code));
 
-      // Current
       var tC = cur.temperature_c;
       var tF = (tC == null) ? null : cToF(tC);
+      var feelsC = cur.feels_like_c;
+      var feelsF = (feelsC == null) ? null : cToF(feelsC);
 
-      document.getElementById("current").innerHTML =
-        "<div class='now'><span class='icon'>" + icon(cur.weather_code) + "</span>" +
-        "<strong>Now:</strong> " +
-        safe(tF == null ? null : tF.toFixed(1)) + "°F" +
-        " (" + safe(tC == null ? null : tC.toFixed(1)) + "°C)" +
-        " • " + label(cur.weather_code) + "</div>" +
-        "<div class='sub'>Humidity: " + safe(cur.humidity_pct) +
-        "% • Wind: " + safe(cur.wind_speed_kmh) + " km/h</div>";
+      var nowHtml =
+        "<div class='nowRow'>" +
+          "<div class='bigIcon' aria-hidden='true'>" + icon(cur.weather_code) + "</div>" +
+          "<div class='nowMain'>" +
+            "<div class='nowLine'>Now: " + safe(tF==null?null:tF.toFixed(1)) + "°F" +
+              " <span style='color:rgba(0,0,0,.45); font-weight:800;'>(" + safe(tC==null?null:tC.toFixed(1)) + "°C)</span>" +
+              " • " + label(cur.weather_code) +
+            "</div>" +
+            "<div class='nowMeta'>" +
+              "<span>Humidity: <strong>" + safe(cur.humidity_pct) + "%</strong></span>" +
+              "<span>Wind: <strong>" + safe(cur.wind_speed_kmh) + " km/h</strong></span>" +
+              "<span>Feels like: <strong>" + safe(feelsF==null?null:feelsF.toFixed(1)) + "°F</strong></span>" +
+            "</div>" +
+          "</div>" +
+          "<div class='sparkWrap'>" +
+            "<div class='sparkLabel'>Daily highs (°F)</div>" +
+            "<canvas id='spark' width='170' height='42'></canvas>" +
+          "</div>" +
+        "</div>";
 
-      // Forecast
+      document.getElementById("nowBlock").innerHTML = nowHtml;
+
+      var today = isoDateLocal();
+
       var rows = daily.slice(0,7).map(function(d){
-        var maxF = (d.tmax_c == null) ? null : cToF(d.tmax_c);
-        var minF = (d.tmin_c == null) ? null : cToF(d.tmin_c);
-        return "<tr>" +
+        var maxF = (d.tmax_c==null)?null:cToF(d.tmax_c);
+        var minF = (d.tmin_c==null)?null:cToF(d.tmin_c);
+        var isToday = (d.date === today);
+
+        return "<tr class='" + (isToday ? "today" : "") + "'>" +
           "<td>" + safe(d.date) + "</td>" +
-          "<td><span class='icon'>" + icon(d.weather_code) + "</span>" + label(d.weather_code) + "</td>" +
-          "<td class='r'>" + safe(maxF == null ? null : maxF.toFixed(0)) + " / " + safe(minF == null ? null : minF.toFixed(0)) + "°F</td>" +
+          "<td><div class='cond'><span class='sIcon'>" + icon(d.weather_code) + "</span><span>" + label(d.weather_code) + "</span></div></td>" +
+          "<td class='r'>" + safe(maxF==null?null:maxF.toFixed(0)) + " / " + safe(minF==null?null:minF.toFixed(0)) + "°F</td>" +
           "<td class='r'>" + safe(d.precip_prob_pct) + "%</td>" +
-          "</tr>";
+        "</tr>";
       }).join("");
 
       document.getElementById("forecast").innerHTML =
-        "<div class='sectionTitle'>7-Day Forecast</div>" +
-        "<table><thead><tr>" +
-        "<th>Date</th><th>Condition</th><th class='r'>High / Low</th><th class='r'>Precip</th>" +
-        "</tr></thead><tbody>" + rows + "</tbody></table>";
+        "<table>" +
+          "<thead><tr>" +
+            "<th>Date</th><th>Condition</th><th class='r'>High / Low</th><th class='r'>Precip</th>" +
+          "</tr></thead>" +
+          "<tbody>" + rows + "</tbody>" +
+        "</table>";
 
-      document.getElementById("updated").textContent =
-        "Updated (UTC): " + safe(meta.generated_utc) + " • Source: " + safe(meta.source);
+      var highsF = daily.slice(0,7).map(function(d){
+        return (d.tmax_c==null) ? null : cToF(d.tmax_c);
+      });
+      var canvas = document.getElementById("spark");
+      if (canvas) drawSparkline(canvas, highsF);
 
-      // 2) Load NWS alerts (free, public)
+      document.getElementById("updated").textContent = "Updated (UTC): " + safe(meta.generated_utc);
+      document.getElementById("source").textContent = "Source: " + safe(meta.source);
+
+      // Alerts (optional)
       var alertsUrl = "https://api.weather.gov/alerts/active?point=" + ALERT_LAT + "," + ALERT_LON;
-
       return fetch(alertsUrl, {
         headers: {
-          // NWS requests a User-Agent identifying the application (good practice)
           "User-Agent": "zurqani-weather (personal site widget)",
           "Accept": "application/geo+json"
         },
@@ -243,15 +444,13 @@
       });
     })
     .then(function(r){
-      // If NWS fails, we still show weather; alerts are optional
       if (!r || !r.ok) throw new Error("NWS alerts unavailable");
       return r.json();
     })
     .then(function(alertsJson){
       var feats = (alertsJson && alertsJson.features) ? alertsJson.features : [];
-      if (!feats.length) return; // no active alerts
+      if (!feats.length) return;
 
-      // Show up to 3 alerts
       feats = feats.slice(0, 3);
 
       var html = feats.map(function(f){
@@ -266,21 +465,17 @@
           "<div class='alertName'>⚠️ " + safe(headline) + "</div>" +
           "<div class='alertMeta'>Severity: " + safe(severity) + " • Onset: " + safe(onset) + " • Ends: " + safe(ends) + "</div>" +
           (desc ? "<div class='alertDesc'>" + desc.replace(/\n/g,"<br>") + "</div>" : "") +
-          "</div>";
+        "</div>";
       }).join("");
 
       document.getElementById("alertsBody").innerHTML = html;
       document.getElementById("alerts").style.display = "block";
     })
     .catch(function(e){
-      // If weather.json fails, show error; if alerts fail, silently ignore
       var status = document.getElementById("status");
-      if (status && status.textContent && status.textContent.indexOf("Loading") === -1) {
-        // Weather loaded already; alerts failed — do nothing
-        return;
-      }
+      if (status && status.textContent === "") return; // weather loaded; alerts failed
       document.getElementById("status").textContent =
-        "Weather unavailable (" + (e && e.message ? e.message : "error") + ")";
+        "Weather unavailable (" + (e && e.message ? e.message : "error") + ").";
     });
 })();
 </script>
