@@ -5,19 +5,19 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-01-28T17:52:51.512575+00:00"
+    "generated_utc": "2026-01-28T19:44:21.175121+00:00"
   },
   "current": {
-    "temperature_c": 3.7,
-    "feels_like_c": 1.1,
-    "humidity_pct": 74,
-    "wind_speed_kmh": 5.2,
-    "weather_code": 1
+    "temperature_c": 6.4,
+    "feels_like_c": 4.6,
+    "humidity_pct": 73,
+    "wind_speed_kmh": 3.4,
+    "weather_code": 0
   },
   "daily": [
     {
       "date": "2026-01-28",
-      "tmax_c": 6.8,
+      "tmax_c": 7.3,
       "tmin_c": -2.8,
       "weather_code": 3,
       "precip_prob_pct": 0
@@ -25,16 +25,16 @@
     {
       "date": "2026-01-29",
       "tmax_c": 7.4,
-      "tmin_c": -0.6,
+      "tmin_c": -0.3,
       "weather_code": 45,
-      "precip_prob_pct": 2
+      "precip_prob_pct": 5
     },
     {
       "date": "2026-01-30",
       "tmax_c": 4.5,
       "tmin_c": -1.0,
       "weather_code": 45,
-      "precip_prob_pct": 3
+      "precip_prob_pct": 5
     },
     {
       "date": "2026-01-31",
