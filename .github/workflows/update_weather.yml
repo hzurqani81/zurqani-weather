@@ -1,9 +1,9 @@
-name: Update weather feed
+name: Update weather.json
 
 on:
-  schedule:
-    - cron: "15 * * * *"  # every hour at :15 UTC
   workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"  # every hour
 
 permissions:
   contents: write
@@ -15,28 +15,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Run fetcher
-        run: python fetch_weather.py
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
 
-      - name: Commit weather.json (if changed)
+      - name: Fetch weather
+        run: |
+          python fetch_weather.py
+
+      - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          if [ -f weather.json ]; then
-            git add weather.json
-            if git diff --cached --quiet; then
-              echo "No changes to commit."
-              exit 0
-            fi
-            git commit -m "Update weather feed"
-            git push
-          else
-            echo "weather.json not found!"
-            exit 1
-          fi
+          git add weather.json
+          git diff --staged --quiet || (git commit -m "Update weather.json" && git push)
