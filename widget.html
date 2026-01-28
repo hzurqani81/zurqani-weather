@@ -105,7 +105,7 @@
     .sparkLabel{ font-size: 12px; color: var(--muted2); font-weight: 700; }
     canvas{ display:block; }
 
-    /* NEW: hourly panel */
+    /* Hourly panel */
     .hourlyPanel{
       margin-top: 10px;
       padding: 12px;
@@ -133,10 +133,35 @@
     .hourlyCanvasWrap{
       width: 100%;
       overflow: hidden;
+      position: relative;
     }
     #hourlyChart{
       width: 100%;
       height: 120px;
+    }
+
+    /* Tooltip */
+    .hourlyTooltip{
+      position: absolute;
+      display: none;
+      pointer-events: none;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.95);
+      box-shadow: 0 10px 24px rgba(0,0,0,.10);
+      font-size: 12px;
+      font-weight: 750;
+      color: #111;
+      transform: translate(-50%, -110%);
+      white-space: nowrap;
+    }
+    .hourlyTooltip .sub{
+      display:block;
+      margin-top: 2px;
+      font-size: 11px;
+      font-weight: 650;
+      color: rgba(0,0,0,.60);
     }
 
     .alerts{
@@ -232,8 +257,6 @@
     </div>
 
     <div id="nowBlock"></div>
-
-    <!-- NEW hourly chart container -->
     <div id="hourlyBlock"></div>
 
     <div class="sectionTitle">7-Day Forecast</div>
@@ -360,11 +383,19 @@
     });
   }
 
-  // NEW: Hourly chart (temp line + precip probability bars)
+  function hourLabelFromTimeStr(t){
+    if (!t || t.indexOf("T") === -1) return "";
+    var hh = parseInt(t.split("T")[1].slice(0,2), 10);
+    if (isNaN(hh)) return "";
+    var ampm = (hh >= 12) ? "p" : "a";
+    var h12 = hh % 12; if (h12 === 0) h12 = 12;
+    return String(h12) + ampm;
+  }
+
+  // Hourly chart: temp line + precip bars + tooltip points return
   function drawHourly(canvas, tempsF, pops, labels){
     var ctx = canvas.getContext("2d");
 
-    // Make canvas sharp on HiDPI screens
     var cssW = canvas.clientWidth || 800;
     var cssH = canvas.clientHeight || 120;
     var dpr = window.devicePixelRatio || 1;
@@ -375,13 +406,12 @@
     var w = cssW, h = cssH;
     ctx.clearRect(0,0,w,h);
 
-    if (!tempsF || tempsF.length < 2) return;
+    if (!tempsF || tempsF.length < 2) return { points: [] };
 
     var padL = 28, padR = 10, padT = 10, padB = 22;
     var chartW = w - padL - padR;
     var chartH = h - padT - padB;
 
-    // split: top 70% for temp line, bottom 30% for precip bars
     var precipH = Math.floor(chartH * 0.30);
     var tempH = chartH - precipH - 6;
 
@@ -401,7 +431,7 @@
       return padT + (tempH - (tNorm * tempH));
     }
 
-    // light baseline grid
+    // baseline
     ctx.strokeStyle = "rgba(0,0,0,.08)";
     ctx.lineWidth = 1;
     ctx.beginPath();
@@ -421,51 +451,46 @@
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // points
+    // points + store for tooltip
+    var points = [];
     tempsF.forEach(function(v,i){
       if (v == null) return;
+      var px = x(i), py = yTemp(v);
       ctx.beginPath();
-      ctx.arc(x(i), yTemp(v), 2.8, 0, Math.PI*2);
+      ctx.arc(px, py, 2.8, 0, Math.PI*2);
       ctx.fillStyle = "#111";
       ctx.fill();
+      points.push({ i: i, x: px, y: py, t: v, p: pops[i], label: labels[i] });
     });
 
-    // precip bars (0–100)
+    // precip bars
     var baseY = padT + tempH + 6 + precipH;
     ctx.fillStyle = "rgba(0,0,0,.18)";
-    for (var i=0; i<pops.length; i++){
-      var p = pops[i];
+    for (var k=0; k<pops.length; k++){
+      var p = pops[k];
       if (p == null) continue;
       var barH = (Math.max(0, Math.min(100, p))/100) * precipH;
       var barW = Math.max(2, chartW / pops.length - 2);
-      var px = x(i) - (barW/2);
-      ctx.fillRect(px, baseY - barH, barW, barH);
+      var px2 = x(k) - (barW/2);
+      ctx.fillRect(px2, baseY - barH, barW, barH);
     }
 
-    // left labels (min/max temp)
+    // left labels
     ctx.fillStyle = "rgba(0,0,0,.55)";
     ctx.font = "12px system-ui, Arial";
     ctx.textAlign = "right";
     ctx.fillText(Math.round(tmax) + "°", padL - 6, padT + 10);
     ctx.fillText(Math.round(tmin) + "°", padL - 6, padT + tempH);
 
-    // x-axis labels: show every 6 hours
+    // x labels every 6 hours
     ctx.textAlign = "center";
     ctx.fillStyle = "rgba(0,0,0,.50)";
     for (var j=0; j<labels.length; j++){
       if (j % 6 !== 0) continue;
       ctx.fillText(labels[j], x(j), h - 6);
     }
-  }
 
-  function hourLabelFromTimeStr(t){
-    // "2026-01-28T17:00" -> "5p"
-    if (!t || t.indexOf("T") === -1) return "";
-    var hh = parseInt(t.split("T")[1].slice(0,2), 10);
-    if (isNaN(hh)) return "";
-    var ampm = (hh >= 12) ? "p" : "a";
-    var h12 = hh % 12; if (h12 === 0) h12 = 12;
-    return String(h12) + ampm;
+    return { points: points };
   }
 
   fetch(WEATHER_JSON_URL, { cache: "no-store" })
@@ -533,7 +558,7 @@
 
       document.getElementById("nowBlock").innerHTML = nowHtml;
 
-      // Hourly chart block
+      // Hourly chart block + tooltip
       if (hourly && hourly.length){
         var tempsF = hourly.map(function(h){ return (h.temperature_c==null)?null:cToF(h.temperature_c); });
         var pops = hourly.map(function(h){ return h.precip_prob_pct; });
@@ -543,21 +568,88 @@
           "<div class='hourlyPanel'>" +
             "<div class='hourlyHdr'>" +
               "<div class='hourlyTitle'>Next 24 hours</div>" +
-              "<div class='hourlyNote'>Temp line + precip bars</div>" +
+              "<div class='hourlyNote'>Hover a point</div>" +
             "</div>" +
             "<div class='hourlyCanvasWrap'>" +
               "<canvas id='hourlyChart'></canvas>" +
+              "<div id='hourlyTip' class='hourlyTooltip'></div>" +
             "</div>" +
           "</div>";
 
         document.getElementById("hourlyBlock").innerHTML = hourlyHtml;
 
         var hc = document.getElementById("hourlyChart");
-        drawHourly(hc, tempsF, pops, labels);
+        var tip = document.getElementById("hourlyTip");
 
-        // redraw on resize so it stays crisp
+        var chartState = drawHourly(hc, tempsF, pops, labels);
+
+        function showTip(pt, clientX, clientY){
+          if (!tip) return;
+          tip.style.display = "block";
+          tip.innerHTML =
+            "<span>" + pt.label + ": " + Math.round(pt.t) + "°F</span>" +
+            (pt.p == null ? "" : "<span class='sub'>Precip: " + pt.p + "%</span>");
+
+          var wrap = hc.parentElement;
+          var rect = wrap.getBoundingClientRect();
+          tip.style.left = (clientX - rect.left) + "px";
+          tip.style.top  = (clientY - rect.top) + "px";
+        }
+
+        function hideTip(){
+          if (tip) tip.style.display = "none";
+        }
+
+        function nearestPoint(clientX, clientY){
+          var rect = hc.getBoundingClientRect();
+          var x = clientX - rect.left;
+          var y = clientY - rect.top;
+
+          var best = null;
+          var bestD = Infinity;
+          var R = 12;
+
+          chartState.points.forEach(function(pt){
+            var dx = pt.x - x;
+            var dy = pt.y - y;
+            var d = Math.sqrt(dx*dx + dy*dy);
+            if (d < bestD){
+              bestD = d;
+              best = pt;
+            }
+          });
+
+          if (best && bestD <= R) return best;
+          return null;
+        }
+
+        hc.addEventListener("mousemove", function(e){
+          var pt = nearestPoint(e.clientX, e.clientY);
+          if (pt) showTip(pt, e.clientX, e.clientY);
+          else hideTip();
+        });
+        hc.addEventListener("mouseleave", hideTip);
+
+        hc.addEventListener("touchstart", function(e){
+          if (!e.touches || !e.touches[0]) return;
+          var t = e.touches[0];
+          var pt = nearestPoint(t.clientX, t.clientY);
+          if (pt) showTip(pt, t.clientX, t.clientY);
+        }, { passive: true });
+
+        hc.addEventListener("touchmove", function(e){
+          if (!e.touches || !e.touches[0]) return;
+          var t = e.touches[0];
+          var pt = nearestPoint(t.clientX, t.clientY);
+          if (pt) showTip(pt, t.clientX, t.clientY);
+          else hideTip();
+        }, { passive: true });
+
+        hc.addEventListener("touchend", hideTip, { passive: true });
+
         window.addEventListener("resize", function(){
-          drawHourly(hc, tempsF, pops, labels);
+          chartState = drawHourly(hc, tempsF, pops, labels);
+          hideTip();
         });
       } else {
         document.getElementById("hourlyBlock").innerHTML = "";
@@ -635,7 +727,7 @@
     })
     .catch(function(e){
       var status = document.getElementById("status");
-      if (status && status.textContent === "") return; // weather loaded; alerts failed
+      if (status && status.textContent === "") return;
       document.getElementById("status").textContent =
         "Weather unavailable (" + (e && e.message ? e.message : "error") + ").";
     });
