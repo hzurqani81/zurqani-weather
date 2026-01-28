@@ -6,60 +6,114 @@
   <title>Campus Weather</title>
 
   <style>
-    body {
-      font-family: system-ui, Arial, sans-serif;
-      margin: 0;
-      background: transparent;
-    }
+    body { font-family: system-ui, Arial, sans-serif; margin: 0; background: transparent; }
+
     .card {
       border: 1px solid #ddd;
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 16px;
-      max-width: 720px;
+      max-width: 760px;
       background: #f5f4ef;
     }
+
     .title {
       font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 8px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
+
+    .pill {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.12);
+      opacity: .9;
+      white-space: nowrap;
+    }
+
     .now {
+      margin-top: 10px;
       font-size: 16px;
-      margin-bottom: 6px;
+      font-weight: 600;
     }
+
+    .sub {
+      margin-top: 6px;
+      font-size: 13px;
+      opacity: .9;
+    }
+
     .muted {
       opacity: .75;
       font-size: 12px;
-      margin-top: 8px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
       margin-top: 10px;
-      font-size: 13px;
     }
-    th, td {
-      padding: 6px 8px;
-      border-bottom: 1px solid #e2e2e2;
+
+    .icon { font-size: 18px; margin-right: 6px; }
+
+    .sectionTitle {
+      font-weight: 800;
+      margin-top: 12px;
+      margin-bottom: 8px;
     }
-    th {
-      text-align: left;
-      font-weight: 600;
+
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+    th, td { padding: 7px 8px; border-bottom: 1px solid rgba(0,0,0,.08); }
+    th { text-align: left; font-weight: 700; opacity: .9; }
+    td.r, th.r { text-align: right; }
+
+    /* Alerts */
+    .alerts {
+      display: none;
+      margin-top: 12px;
+      border-radius: 14px;
+      padding: 12px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(255, 235, 59, 0.18); /* soft yellow */
     }
-    td.r, th.r {
-      text-align: right;
+    .alerts .hdr {
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
     }
-    .icon {
-      font-size: 18px;
-      margin-right: 4px;
+    .alertItem {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(0,0,0,.18);
     }
+    .alertName { font-weight: 800; }
+    .alertMeta { font-size: 12px; opacity: .85; margin-top: 2px; }
+    .alertDesc { font-size: 13px; margin-top: 6px; line-height: 1.35; }
+
+    /* Themes (simple, pleasant) */
+    .theme-sunny { background: #fff7e6; }
+    .theme-cloudy { background: #f2f4f7; }
+    .theme-rain { background: #eef6ff; }
+    .theme-snow { background: #f6fbff; }
+    .theme-fog { background: #f3f3f3; }
+    .theme-storm { background: #f3f0ff; }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <div class="title">Campus Weather</div>
-    <div id="status">Loading…</div>
+  <div id="card" class="card">
+    <div class="title">
+      <div>Campus Weather</div>
+      <div id="locPill" class="pill">Monticello, AR</div>
+    </div>
+
+    <div id="status" class="muted">Loading…</div>
+
+    <div id="alerts" class="alerts">
+      <div class="hdr">🚨 Weather Alerts</div>
+      <div id="alertsBody"></div>
+    </div>
+
     <div id="current"></div>
     <div id="forecast"></div>
     <div id="updated" class="muted"></div>
@@ -67,8 +121,12 @@
 
 <script>
 (function(){
-  // weather.json must be in the same GitHub Pages site
+  // Uses your GitHub Pages weather.json (same folder)
   var WEATHER_JSON_URL = "./weather.json";
+
+  // NWS alerts point for Monticello, AR (keep matching your fetch_weather.py location)
+  var ALERT_LAT = 33.6289;
+  var ALERT_LON = -91.7909;
 
   function cToF(c){ return (c * 9 / 5) + 32; }
   function safe(v){ return (v === null || v === undefined) ? "—" : v; }
@@ -99,6 +157,29 @@
     return "Mixed";
   }
 
+  function themeClass(code){
+    if (code === 0 || code === 1 || code === 2) return "theme-sunny";
+    if (code === 3) return "theme-cloudy";
+    if (code >= 45 && code <= 48) return "theme-fog";
+    if ((code >= 51 && code <= 57) || (code >= 61 && code <= 67) || (code >= 80 && code <= 82)) return "theme-rain";
+    if (code >= 71 && code <= 77) return "theme-snow";
+    if (code >= 95) return "theme-storm";
+    return "theme-cloudy";
+  }
+
+  function fmtTime(s){
+    if (!s) return "—";
+    // NWS returns ISO timestamps; display just date/time
+    return String(s).replace("T"," ").replace(/\+.*$/,"").replace("Z","");
+  }
+
+  function truncate(txt, n){
+    txt = txt || "";
+    if (txt.length <= n) return txt;
+    return txt.slice(0, n - 1) + "…";
+  }
+
+  // 1) Load your weather.json (Open-Meteo data)
   fetch(WEATHER_JSON_URL, { cache: "no-store" })
     .then(function(r){
       if (!r.ok) throw new Error("HTTP " + r.status);
@@ -111,6 +192,11 @@
       var daily = data.daily || [];
       var meta = data.meta || {};
 
+      // Theme
+      var card = document.getElementById("card");
+      card.classList.add(themeClass(cur.weather_code));
+
+      // Current
       var tC = cur.temperature_c;
       var tF = (tC == null) ? null : cToF(tC);
 
@@ -120,38 +206,81 @@
         safe(tF == null ? null : tF.toFixed(1)) + "°F" +
         " (" + safe(tC == null ? null : tC.toFixed(1)) + "°C)" +
         " • " + label(cur.weather_code) + "</div>" +
-        "<div>Humidity: " + safe(cur.humidity_pct) +
+        "<div class='sub'>Humidity: " + safe(cur.humidity_pct) +
         "% • Wind: " + safe(cur.wind_speed_kmh) + " km/h</div>";
 
+      // Forecast
       var rows = daily.slice(0,7).map(function(d){
         var maxF = (d.tmax_c == null) ? null : cToF(d.tmax_c);
         var minF = (d.tmin_c == null) ? null : cToF(d.tmin_c);
-
         return "<tr>" +
           "<td>" + safe(d.date) + "</td>" +
-          "<td><span class='icon'>" + icon(d.weather_code) + "</span>" +
-          label(d.weather_code) + "</td>" +
-          "<td class='r'>" +
-          safe(maxF == null ? null : maxF.toFixed(0)) + " / " +
-          safe(minF == null ? null : minF.toFixed(0)) + "°F</td>" +
+          "<td><span class='icon'>" + icon(d.weather_code) + "</span>" + label(d.weather_code) + "</td>" +
+          "<td class='r'>" + safe(maxF == null ? null : maxF.toFixed(0)) + " / " + safe(minF == null ? null : minF.toFixed(0)) + "°F</td>" +
           "<td class='r'>" + safe(d.precip_prob_pct) + "%</td>" +
           "</tr>";
       }).join("");
 
       document.getElementById("forecast").innerHTML =
-        "<div style='font-weight:700; margin-top:10px;'>7-Day Forecast</div>" +
+        "<div class='sectionTitle'>7-Day Forecast</div>" +
         "<table><thead><tr>" +
-        "<th>Date</th><th>Condition</th>" +
-        "<th class='r'>High / Low</th><th class='r'>Precip</th>" +
+        "<th>Date</th><th>Condition</th><th class='r'>High / Low</th><th class='r'>Precip</th>" +
         "</tr></thead><tbody>" + rows + "</tbody></table>";
 
       document.getElementById("updated").textContent =
-        "Updated (UTC): " + safe(meta.generated_utc) +
-        " • Source: " + safe(meta.source);
+        "Updated (UTC): " + safe(meta.generated_utc) + " • Source: " + safe(meta.source);
+
+      // 2) Load NWS alerts (free, public)
+      var alertsUrl = "https://api.weather.gov/alerts/active?point=" + ALERT_LAT + "," + ALERT_LON;
+
+      return fetch(alertsUrl, {
+        headers: {
+          // NWS requests a User-Agent identifying the application (good practice)
+          "User-Agent": "zurqani-weather (personal site widget)",
+          "Accept": "application/geo+json"
+        },
+        cache: "no-store"
+      });
+    })
+    .then(function(r){
+      // If NWS fails, we still show weather; alerts are optional
+      if (!r || !r.ok) throw new Error("NWS alerts unavailable");
+      return r.json();
+    })
+    .then(function(alertsJson){
+      var feats = (alertsJson && alertsJson.features) ? alertsJson.features : [];
+      if (!feats.length) return; // no active alerts
+
+      // Show up to 3 alerts
+      feats = feats.slice(0, 3);
+
+      var html = feats.map(function(f){
+        var p = (f && f.properties) ? f.properties : {};
+        var headline = p.headline || p.event || "Alert";
+        var severity = p.severity || "—";
+        var onset = fmtTime(p.onset);
+        var ends = fmtTime(p.ends || p.expires);
+        var desc = truncate(p.description || p.instruction || "", 280);
+
+        return "<div class='alertItem'>" +
+          "<div class='alertName'>⚠️ " + safe(headline) + "</div>" +
+          "<div class='alertMeta'>Severity: " + safe(severity) + " • Onset: " + safe(onset) + " • Ends: " + safe(ends) + "</div>" +
+          (desc ? "<div class='alertDesc'>" + desc.replace(/\n/g,"<br>") + "</div>" : "") +
+          "</div>";
+      }).join("");
+
+      document.getElementById("alertsBody").innerHTML = html;
+      document.getElementById("alerts").style.display = "block";
     })
     .catch(function(e){
+      // If weather.json fails, show error; if alerts fail, silently ignore
+      var status = document.getElementById("status");
+      if (status && status.textContent && status.textContent.indexOf("Loading") === -1) {
+        // Weather loaded already; alerts failed — do nothing
+        return;
+      }
       document.getElementById("status").textContent =
-        "Weather unavailable (" + e.message + ")";
+        "Weather unavailable (" + (e && e.message ? e.message : "error") + ")";
     });
 })();
 </script>
