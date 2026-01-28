@@ -25,8 +25,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 16px;
-      // background: var(--card-bg);
-      background: #f5f4ef; /* fixed neutral color , #f5f4ef → warm academic , #ffffff → clean white , #f2f4f7 → modern gray */
+      background: #f5f4ef; /* fixed neutral color */
       box-shadow: var(--shadow);
     }
 
@@ -201,13 +200,6 @@
       color: var(--muted2);
       line-height: 1.35;
     }
-
-    .theme-sunny{ --card-bg:#fff7e6; }
-    .theme-cloudy{ --card-bg:#f2f4f7; }
-    .theme-rain{ --card-bg:#eef6ff; }
-    .theme-snow{ --card-bg:#f6fbff; }
-    .theme-fog{ --card-bg:#f3f3f3; }
-    .theme-storm{ --card-bg:#f3f0ff; }
   </style>
 </head>
 
@@ -280,16 +272,6 @@
     return "Mixed";
   }
 
-  function themeClass(code){
-    if (code === 0 || code === 1 || code === 2) return "theme-sunny";
-    if (code === 3) return "theme-cloudy";
-    if (code >= 45 && code <= 48) return "theme-fog";
-    if ((code >= 51 && code <= 57) || (code >= 61 && code <= 67) || (code >= 80 && code <= 82)) return "theme-rain";
-    if (code >= 71 && code <= 77) return "theme-snow";
-    if (code >= 95) return "theme-storm";
-    return "theme-cloudy";
-  }
-
   function fmtTime(s){
     if (!s) return "—";
     return String(s).replace("T"," ").replace(/\+.*$/,"").replace("Z","");
@@ -301,53 +283,67 @@
     return txt.slice(0, n - 1) + "…";
   }
 
-  function isoDateLocal(){
-    var d = new Date();
-    var y = d.getFullYear();
-    var m = String(d.getMonth()+1).padStart(2,"0");
-    var day = String(d.getDate()).padStart(2,"0");
-    return y + "-" + m + "-" + day;
+  // ✅ Timezone-correct "today" date based on the LOCATION timezone (not your computer timezone)
+  function isoDateInTimeZone(tz){
+    try{
+      var parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: tz,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).formatToParts(new Date());
+
+      var y = parts.find(function(p){ return p.type === "year"; }).value;
+      var m = parts.find(function(p){ return p.type === "month"; }).value;
+      var d = parts.find(function(p){ return p.type === "day"; }).value;
+      return y + "-" + m + "-" + d;
+    }catch(e){
+      var d0 = new Date();
+      var y0 = d0.getFullYear();
+      var m0 = String(d0.getMonth()+1).padStart(2,"0");
+      var day0 = String(d0.getDate()).padStart(2,"0");
+      return y0 + "-" + m0 + "-" + day0;
+    }
   }
 
-function drawSparkline(canvas, values){
-  var ctx = canvas.getContext("2d");
-  var w = canvas.width, h = canvas.height;
-  ctx.clearRect(0,0,w,h);
+  function drawSparkline(canvas, values){
+    var ctx = canvas.getContext("2d");
+    var w = canvas.width, h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+    if (!values || values.length < 2) return;
 
-  if (!values || values.length < 2) return;
+    var min = Infinity, max = -Infinity;
+    values.forEach(function(v){
+      if (v == null) return;
+      min = Math.min(min, v);
+      max = Math.max(max, v);
+    });
+    if (min === max) { min -= 1; max += 1; }
 
-  var min = Infinity, max = -Infinity;
-  values.forEach(function(v){
-    if (v == null) return;
-    min = Math.min(min, v);
-    max = Math.max(max, v);
-  });
-  if (min === max) { min -= 1; max += 1; }
+    function x(i){ return (i/(values.length-1)) * (w-10) + 5; }
+    function y(v){ return (h-8) - ((v-min)/(max-min))*(h-16) + 4; }
 
-  function x(i){ return (i/(values.length-1)) * (w-10) + 5; }
-  function y(v){ return (h-8) - ((v-min)/(max-min))*(h-16) + 4; }
-
-  /* Line */
-  ctx.beginPath();
-  values.forEach(function(v,i){
-    if (v == null) return;
-    var px = x(i), py = y(v);
-    if (i === 0) ctx.moveTo(px, py);
-    else ctx.lineTo(px, py);
-  });
-  ctx.strokeStyle = "#111";
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  /* Points (THIS IS THE KEY CHANGE) */
-  values.forEach(function(v,i){
-    if (v == null) return;
+    // Line
     ctx.beginPath();
-    ctx.arc(x(i), y(v), 3.5, 0, Math.PI*2);
-    ctx.fillStyle = "#111";
-    ctx.fill();
-  });
-}
+    values.forEach(function(v,i){
+      if (v == null) return;
+      var px = x(i), py = y(v);
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    });
+    ctx.strokeStyle = "#111";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Points
+    values.forEach(function(v,i){
+      if (v == null) return;
+      ctx.beginPath();
+      ctx.arc(x(i), y(v), 3.5, 0, Math.PI*2);
+      ctx.fillStyle = "#111";
+      ctx.fill();
+    });
+  }
 
   fetch(WEATHER_JSON_URL, { cache: "no-store" })
     .then(function(r){
@@ -363,14 +359,12 @@ function drawSparkline(canvas, values){
 
       document.getElementById("locPill").textContent = meta.place_name || "Location";
 
-      var card = document.getElementById("card");
-      // card.classList.add(themeClass(cur.weather_code));
-
       var tC = cur.temperature_c;
       var tF = (tC == null) ? null : cToF(tC);
       var feelsC = cur.feels_like_c;
       var feelsF = (feelsC == null) ? null : cToF(feelsC);
 
+      // ✅ show true NOW condition from current.weather_code
       var nowHtml =
         "<div class='nowRow'>" +
           "<div class='bigIcon' aria-hidden='true'>" + icon(cur.weather_code) + "</div>" +
@@ -393,7 +387,9 @@ function drawSparkline(canvas, values){
 
       document.getElementById("nowBlock").innerHTML = nowHtml;
 
-      var today = isoDateLocal();
+      // ✅ Use location timezone from weather.json meta if available
+      var tz = meta.timezone || meta.timezone_name || "UTC";
+      var today = isoDateInTimeZone(tz);
 
       var rows = daily.slice(0,7).map(function(d){
         var maxF = (d.tmax_c==null)?null:cToF(d.tmax_c);
