@@ -1,5 +1,3 @@
-.github/workflows/update_weather.yml
-
 name: Update weather feed
 
 on:
