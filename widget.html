@@ -25,7 +25,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 16px;
-      background: #f5f4ef; /* fixed neutral color */
+      background: #f5f4ef;
       box-shadow: var(--shadow);
     }
 
@@ -38,15 +38,8 @@
     }
 
     .titleWrap{ display:flex; flex-direction: column; gap: 4px; }
-    .title{
-      font-size: 20px;
-      font-weight: 900;
-      letter-spacing: .2px;
-    }
-    .subtitle{
-      font-size: 12px;
-      color: var(--muted);
-    }
+    .title{ font-size: 20px; font-weight: 900; letter-spacing: .2px; }
+    .subtitle{ font-size: 12px; color: var(--muted); }
 
     .pill{
       font-size: 12px;
@@ -85,13 +78,7 @@
     }
 
     .nowMain{ flex: 1 1 auto; min-width: 0; }
-    .nowLine{
-      font-size: 16px;
-      font-weight: 800;
-      line-height: 1.25;
-      margin-bottom: 4px;
-    }
-
+    .nowLine{ font-size: 16px; font-weight: 800; line-height: 1.25; margin-bottom: 4px; }
     .nowMeta{
       font-size: 13px;
       color: var(--muted);
@@ -101,7 +88,6 @@
       gap: 10px;
     }
 
-    /* Small helper line to explain daily vs current */
     .todayHint{
       margin-top: 4px;
       font-size: 12px;
@@ -116,12 +102,42 @@
       gap: 6px;
       align-items: flex-end;
     }
-    .sparkLabel{
+    .sparkLabel{ font-size: 12px; color: var(--muted2); font-weight: 700; }
+    canvas{ display:block; }
+
+    /* NEW: hourly panel */
+    .hourlyPanel{
+      margin-top: 10px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255,255,255,.45);
+    }
+    .hourlyHdr{
+      display:flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .hourlyTitle{
+      font-weight: 900;
+      font-size: 13px;
+    }
+    .hourlyNote{
       font-size: 12px;
       color: var(--muted2);
-      font-weight: 700;
+      font-weight: 650;
+      white-space: nowrap;
     }
-    canvas{ display:block; }
+    .hourlyCanvasWrap{
+      width: 100%;
+      overflow: hidden;
+    }
+    #hourlyChart{
+      width: 100%;
+      height: 120px;
+    }
 
     .alerts{
       display:none;
@@ -147,12 +163,7 @@
     .alertMeta{ font-size: 12px; color: var(--muted); margin-top: 2px; }
     .alertDesc{ font-size: 13px; margin-top: 6px; line-height: 1.35; color: rgba(0,0,0,.85); }
 
-    .sectionTitle{
-      font-weight: 900;
-      margin-top: 14px;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
+    .sectionTitle{ font-weight: 900; margin-top: 14px; margin-bottom: 8px; font-size: 14px; }
 
     table{
       width: 100%;
@@ -178,20 +189,11 @@
     }
     tbody tr:last-child td{ border-bottom: none; }
     .r{ text-align:right; }
-    .cond{
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      white-space: nowrap;
-    }
+    .cond{ display:flex; align-items:center; gap: 8px; white-space: nowrap; }
     .cond .sIcon{ font-size: 16px; }
 
-    tbody tr.today{
-      background: rgba(0,0,0,.04);
-    }
-    tbody tr.today td{
-      font-weight: 700;
-    }
+    tbody tr.today{ background: rgba(0,0,0,.04); }
+    tbody tr.today td{ font-weight: 700; }
 
     .footer{
       margin-top: 10px;
@@ -230,6 +232,9 @@
     </div>
 
     <div id="nowBlock"></div>
+
+    <!-- NEW hourly chart container -->
+    <div id="hourlyBlock"></div>
 
     <div class="sectionTitle">7-Day Forecast</div>
     <div id="forecast"></div>
@@ -281,6 +286,13 @@
     return "Mixed";
   }
 
+  function degToCardinal(deg){
+    if (deg == null) return "—";
+    var dirs = ["N","NE","E","SE","S","SW","W","NW"];
+    var ix = Math.round(deg / 45) % 8;
+    return dirs[ix];
+  }
+
   function fmtTime(s){
     if (!s) return "—";
     return String(s).replace("T"," ").replace(/\+.*$/,"").replace("Z","");
@@ -292,7 +304,6 @@
     return txt.slice(0, n - 1) + "…";
   }
 
-  // Use the LOCATION timezone (meta.timezone) to compute "today"
   function isoDateInTimeZone(tz){
     try{
       var parts = new Intl.DateTimeFormat("en-CA", {
@@ -308,10 +319,7 @@
       return y + "-" + m + "-" + d;
     }catch(e){
       var d0 = new Date();
-      var y0 = d0.getFullYear();
-      var m0 = String(d0.getMonth()+1).padStart(2,"0");
-      var day0 = String(d0.getDate()).padStart(2,"0");
-      return y0 + "-" + m0 + "-" + day0;
+      return d0.getFullYear() + "-" + String(d0.getMonth()+1).padStart(2,"0") + "-" + String(d0.getDate()).padStart(2,"0");
     }
   }
 
@@ -332,7 +340,6 @@
     function x(i){ return (i/(values.length-1)) * (w-10) + 5; }
     function y(v){ return (h-8) - ((v-min)/(max-min))*(h-16) + 4; }
 
-    // line
     ctx.beginPath();
     values.forEach(function(v,i){
       if (v == null) return;
@@ -344,7 +351,6 @@
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // points
     values.forEach(function(v,i){
       if (v == null) return;
       ctx.beginPath();
@@ -352,6 +358,114 @@
       ctx.fillStyle = "#111";
       ctx.fill();
     });
+  }
+
+  // NEW: Hourly chart (temp line + precip probability bars)
+  function drawHourly(canvas, tempsF, pops, labels){
+    var ctx = canvas.getContext("2d");
+
+    // Make canvas sharp on HiDPI screens
+    var cssW = canvas.clientWidth || 800;
+    var cssH = canvas.clientHeight || 120;
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.floor(cssW * dpr);
+    canvas.height = Math.floor(cssH * dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    var w = cssW, h = cssH;
+    ctx.clearRect(0,0,w,h);
+
+    if (!tempsF || tempsF.length < 2) return;
+
+    var padL = 28, padR = 10, padT = 10, padB = 22;
+    var chartW = w - padL - padR;
+    var chartH = h - padT - padB;
+
+    // split: top 70% for temp line, bottom 30% for precip bars
+    var precipH = Math.floor(chartH * 0.30);
+    var tempH = chartH - precipH - 6;
+
+    var tmin = Infinity, tmax = -Infinity;
+    tempsF.forEach(function(v){
+      if (v == null) return;
+      tmin = Math.min(tmin, v);
+      tmax = Math.max(tmax, v);
+    });
+    if (tmin === tmax) { tmin -= 1; tmax += 1; }
+    var tPad = 1.5;
+    tmin -= tPad; tmax += tPad;
+
+    function x(i){ return padL + (i/(tempsF.length-1)) * chartW; }
+    function yTemp(v){
+      var tNorm = (v - tmin) / (tmax - tmin);
+      return padT + (tempH - (tNorm * tempH));
+    }
+
+    // light baseline grid
+    ctx.strokeStyle = "rgba(0,0,0,.08)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, padT + tempH);
+    ctx.lineTo(padL + chartW, padT + tempH);
+    ctx.stroke();
+
+    // temp line
+    ctx.beginPath();
+    tempsF.forEach(function(v,i){
+      if (v == null) return;
+      var px = x(i), py = yTemp(v);
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    });
+    ctx.strokeStyle = "#111";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // points
+    tempsF.forEach(function(v,i){
+      if (v == null) return;
+      ctx.beginPath();
+      ctx.arc(x(i), yTemp(v), 2.8, 0, Math.PI*2);
+      ctx.fillStyle = "#111";
+      ctx.fill();
+    });
+
+    // precip bars (0–100)
+    var baseY = padT + tempH + 6 + precipH;
+    ctx.fillStyle = "rgba(0,0,0,.18)";
+    for (var i=0; i<pops.length; i++){
+      var p = pops[i];
+      if (p == null) continue;
+      var barH = (Math.max(0, Math.min(100, p))/100) * precipH;
+      var barW = Math.max(2, chartW / pops.length - 2);
+      var px = x(i) - (barW/2);
+      ctx.fillRect(px, baseY - barH, barW, barH);
+    }
+
+    // left labels (min/max temp)
+    ctx.fillStyle = "rgba(0,0,0,.55)";
+    ctx.font = "12px system-ui, Arial";
+    ctx.textAlign = "right";
+    ctx.fillText(Math.round(tmax) + "°", padL - 6, padT + 10);
+    ctx.fillText(Math.round(tmin) + "°", padL - 6, padT + tempH);
+
+    // x-axis labels: show every 6 hours
+    ctx.textAlign = "center";
+    ctx.fillStyle = "rgba(0,0,0,.50)";
+    for (var j=0; j<labels.length; j++){
+      if (j % 6 !== 0) continue;
+      ctx.fillText(labels[j], x(j), h - 6);
+    }
+  }
+
+  function hourLabelFromTimeStr(t){
+    // "2026-01-28T17:00" -> "5p"
+    if (!t || t.indexOf("T") === -1) return "";
+    var hh = parseInt(t.split("T")[1].slice(0,2), 10);
+    if (isNaN(hh)) return "";
+    var ampm = (hh >= 12) ? "p" : "a";
+    var h12 = hh % 12; if (h12 === 0) h12 = 12;
+    return String(h12) + ampm;
   }
 
   fetch(WEATHER_JSON_URL, { cache: "no-store" })
@@ -364,13 +478,13 @@
 
       var cur = data.current || {};
       var daily = data.daily || [];
+      var hourly = data.hourly || [];
       var meta = data.meta || {};
 
       document.getElementById("locPill").textContent = meta.place_name || "Location";
 
       var tz = meta.timezone || "UTC";
       var today = isoDateInTimeZone(tz);
-
       var todayDaily = daily && daily.length ? daily[0] : null;
 
       var tC = cur.temperature_c;
@@ -378,12 +492,21 @@
       var feelsC = cur.feels_like_c;
       var feelsF = (feelsC == null) ? null : cToF(feelsC);
 
-      // Show TRUE NOW condition from current.weather_code
-      // And show "Today:" (daily[0]) to explain why it can differ.
+      var windDir = cur.wind_dir_deg;
+      var windCard = degToCardinal(windDir);
+      var windGust = cur.wind_gust_kmh;
+
       var todayHintHtml = "";
       if (todayDaily && todayDaily.weather_code != null){
-        todayHintHtml =
-          "<div class='todayHint'>Today: " + label(todayDaily.weather_code) + " (daily forecast)</div>";
+        todayHintHtml = "<div class='todayHint'>Today: " + label(todayDaily.weather_code) + " (daily forecast)</div>";
+      }
+
+      var windExtra = "";
+      if (windDir != null || windGust != null){
+        var dirPart = (windDir == null) ? "—" : (windCard + " (" + windDir + "°)");
+        var gustPart = (windGust == null) ? "—" : (windGust.toFixed(1) + " km/h");
+        windExtra = "<span>Wind dir: <strong>" + dirPart + "</strong></span>" +
+                    "<span>Gust: <strong>" + gustPart + "</strong></span>";
       }
 
       var nowHtml =
@@ -398,6 +521,7 @@
               "<span>Humidity: <strong>" + safe(cur.humidity_pct) + "%</strong></span>" +
               "<span>Wind: <strong>" + safe(cur.wind_speed_kmh) + " km/h</strong></span>" +
               "<span>Feels like: <strong>" + safe(feelsF==null?null:feelsF.toFixed(1)) + "°F</strong></span>" +
+              windExtra +
             "</div>" +
             todayHintHtml +
           "</div>" +
@@ -409,6 +533,37 @@
 
       document.getElementById("nowBlock").innerHTML = nowHtml;
 
+      // Hourly chart block
+      if (hourly && hourly.length){
+        var tempsF = hourly.map(function(h){ return (h.temperature_c==null)?null:cToF(h.temperature_c); });
+        var pops = hourly.map(function(h){ return h.precip_prob_pct; });
+        var labels = hourly.map(function(h){ return hourLabelFromTimeStr(h.time); });
+
+        var hourlyHtml =
+          "<div class='hourlyPanel'>" +
+            "<div class='hourlyHdr'>" +
+              "<div class='hourlyTitle'>Next 24 hours</div>" +
+              "<div class='hourlyNote'>Temp line + precip bars</div>" +
+            "</div>" +
+            "<div class='hourlyCanvasWrap'>" +
+              "<canvas id='hourlyChart'></canvas>" +
+            "</div>" +
+          "</div>";
+
+        document.getElementById("hourlyBlock").innerHTML = hourlyHtml;
+
+        var hc = document.getElementById("hourlyChart");
+        drawHourly(hc, tempsF, pops, labels);
+
+        // redraw on resize so it stays crisp
+        window.addEventListener("resize", function(){
+          drawHourly(hc, tempsF, pops, labels);
+        });
+      } else {
+        document.getElementById("hourlyBlock").innerHTML = "";
+      }
+
+      // daily table
       var rows = daily.slice(0,7).map(function(d){
         var maxF = (d.tmax_c==null)?null:cToF(d.tmax_c);
         var minF = (d.tmin_c==null)?null:cToF(d.tmin_c);
@@ -430,6 +585,7 @@
           "<tbody>" + rows + "</tbody>" +
         "</table>";
 
+      // sparkline highs
       var highsF = daily.slice(0,7).map(function(d){
         return (d.tmax_c==null) ? null : cToF(d.tmax_c);
       });
@@ -439,7 +595,7 @@
       document.getElementById("updated").textContent = "Updated (UTC): " + safe(meta.generated_utc);
       document.getElementById("source").textContent = "Source: " + safe(meta.source);
 
-      // Alerts (optional)
+      // Alerts
       var alertsUrl = "https://api.weather.gov/alerts/active?point=" + ALERT_LAT + "," + ALERT_LON;
       return fetch(alertsUrl, {
         headers: {
