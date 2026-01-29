@@ -153,7 +153,6 @@
       font-size: 12px;
       font-weight: 750;
       color: #111;
-      transform: translate(-50%, -110%);
       white-space: nowrap;
       z-index: 10;
     }
@@ -356,6 +355,11 @@
     return String(h12) + ampm;
   }
 
+  function parseLocalHourTime(s){
+    if (!s) return null;
+    return new Date(s); // "YYYY-MM-DDTHH:MM" treated as local time
+  }
+
   // Sparkline w/ points returned for tooltip
   function drawSparkline(canvas, values){
     var ctx = canvas.getContext("2d");
@@ -402,8 +406,8 @@
     return { points: points };
   }
 
-  // Hourly chart: temp line + precip bars + tooltip points return
-  function drawHourly(canvas, tempsF, pops, labels){
+  // Hourly chart: temp line + precip bars + tooltip points return + NOW LINE
+  function drawHourly(canvas, tempsF, pops, labels, hourTimes){
     var ctx = canvas.getContext("2d");
 
     var cssW = canvas.clientWidth || 800;
@@ -449,6 +453,50 @@
     ctx.lineTo(padL + chartW, padT + tempH);
     ctx.stroke();
 
+    // ---------- NOW LINE (dynamic) ----------
+    if (hourTimes && hourTimes.length >= 2){
+      var now = new Date();
+
+      var idx = -1;
+      for (var i=0; i<hourTimes.length; i++){
+        var dt = hourTimes[i];
+        if (dt && dt.getTime() >= now.getTime()){
+          idx = i;
+          break;
+        }
+      }
+
+      var xNow = null;
+
+      if (idx === 0){
+        xNow = x(0);
+      } else if (idx > 0){
+        var t0 = hourTimes[idx-1].getTime();
+        var t1 = hourTimes[idx].getTime();
+        var tn = now.getTime();
+        var frac = (t1 === t0) ? 0 : (tn - t0) / (t1 - t0);
+        frac = Math.max(0, Math.min(1, frac));
+        xNow = x(idx-1) + frac * (x(idx) - x(idx-1));
+      } else {
+        xNow = x(hourTimes.length - 1);
+      }
+
+      ctx.save();
+      ctx.strokeStyle = "rgba(220, 0, 0, .75)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(xNow, padT);
+      ctx.lineTo(xNow, padT + tempH + 6 + precipH);
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(220, 0, 0, .85)";
+      ctx.font = "12px system-ui, Arial";
+      ctx.textAlign = "center";
+      ctx.fillText("Now", xNow, padT + 10);
+      ctx.restore();
+    }
+    // --------------------------------------
+
     // temp line
     ctx.beginPath();
     tempsF.forEach(function(v,i){
@@ -476,7 +524,7 @@
     // precip bars
     var baseY = padT + tempH + 6 + precipH;
     ctx.fillStyle = "rgba(0,0,0,.18)";
-    for (var k=0; k<pops.length; k++){
+    for (var k = 0; k < pops.length; k++){
       var p = pops[k];
       if (p == null) continue;
       var barH = (Math.max(0, Math.min(100, p))/100) * precipH;
@@ -495,7 +543,7 @@
     // x labels every 6 hours
     ctx.textAlign = "center";
     ctx.fillStyle = "rgba(0,0,0,.50)";
-    for (var j=0; j<labels.length; j++){
+    for (var j = 0; j < labels.length; j++){
       if (j % 6 !== 0) continue;
       ctx.fillText(labels[j], x(j), h - 6);
     }
@@ -503,107 +551,91 @@
     return { points: points };
   }
 
-  // Generic tooltip helpers (works for both charts)
-function attachTooltipToCanvas(canvas, tipEl, getStateFn, formatHtmlFn, hitRadius){
-  if (!canvas || !tipEl) return;
+  // Tooltip helper (auto place above/below + clamp)
+  function attachTooltipToCanvas(canvas, tipEl, getStateFn, formatHtmlFn, hitRadius){
+    if (!canvas || !tipEl) return;
 
-  function hideTip(){ tipEl.style.display = "none"; }
+    function hideTip(){ tipEl.style.display = "none"; }
 
-  function nearestPoint(clientX, clientY){
-    var rect = canvas.getBoundingClientRect();
-    var x = clientX - rect.left;
-    var y = clientY - rect.top;
+    function nearestPoint(clientX, clientY){
+      var rect = canvas.getBoundingClientRect();
+      var x = clientX - rect.left;
+      var y = clientY - rect.top;
 
-    var state = getStateFn();
-    var pts = (state && state.points) ? state.points : [];
+      var state = getStateFn();
+      var pts = (state && state.points) ? state.points : [];
 
-    var best = null;
-    var bestD = Infinity;
-    var R = hitRadius || 12;
+      var best = null;
+      var bestD = Infinity;
+      var R = hitRadius || 12;
 
-    pts.forEach(function(pt){
-      var dx = pt.x - x;
-      var dy = pt.y - y;
-      var d = Math.sqrt(dx*dx + dy*dy);
-      if (d < bestD){ bestD = d; best = pt; }
+      pts.forEach(function(pt){
+        var dx = pt.x - x;
+        var dy = pt.y - y;
+        var d = Math.sqrt(dx*dx + dy*dy);
+        if (d < bestD){ bestD = d; best = pt; }
+      });
+
+      if (best && bestD <= R) return best;
+      return null;
+    }
+
+    function showTip(pt, clientX, clientY){
+      tipEl.innerHTML = formatHtmlFn(pt);
+      tipEl.style.display = "block";
+
+      var wrap = tipEl.parentElement;
+      var wrapRect = wrap.getBoundingClientRect();
+      var canvasRect = canvas.getBoundingClientRect();
+
+      var x = clientX - wrapRect.left;
+      var y = clientY - wrapRect.top;
+
+      var yInCanvas = clientY - canvasRect.top;
+      var placeBelow = (yInCanvas < 28);
+
+      // measure tooltip
+      var tw = tipEl.offsetWidth;
+      var th = tipEl.offsetHeight;
+
+      var top = placeBelow ? (y + 14) : (y - 14 - th);
+      var left = x - (tw / 2);
+
+      var pad = 8;
+      if (left < pad) left = pad;
+      if (left + tw > wrapRect.width - pad) left = wrapRect.width - pad - tw;
+
+      if (top < pad) top = pad;
+      if (top + th > wrapRect.height - pad) top = wrapRect.height - pad - th;
+
+      tipEl.style.left = left + "px";
+      tipEl.style.top = top + "px";
+    }
+
+    canvas.addEventListener("mousemove", function(e){
+      var pt = nearestPoint(e.clientX, e.clientY);
+      if (pt) showTip(pt, e.clientX, e.clientY);
+      else hideTip();
     });
+    canvas.addEventListener("mouseleave", hideTip);
 
-    if (best && bestD <= R) return best;
-    return null;
+    canvas.addEventListener("touchstart", function(e){
+      if (!e.touches || !e.touches[0]) return;
+      var t = e.touches[0];
+      var pt = nearestPoint(t.clientX, t.clientY);
+      if (pt) showTip(pt, t.clientX, t.clientY);
+    }, { passive: true });
+
+    canvas.addEventListener("touchmove", function(e){
+      if (!e.touches || !e.touches[0]) return;
+      var t = e.touches[0];
+      var pt = nearestPoint(t.clientX, t.clientY);
+      if (pt) showTip(pt, t.clientX, t.clientY);
+      else hideTip();
+    }, { passive: true });
+
+    canvas.addEventListener("touchend", hideTip, { passive: true });
   }
-
-  function showTip(pt, clientX, clientY){
-    tipEl.innerHTML = formatHtmlFn(pt);
-    tipEl.style.display = "block";
-
-    // We position relative to a wrapper that should be position:relative
-    var wrap = tipEl.parentElement;
-    var wrapRect = wrap.getBoundingClientRect();
-    var canvasRect = canvas.getBoundingClientRect();
-
-    // pointer position inside the WRAP (CSS pixels)
-    var x = clientX - wrapRect.left;
-    var y = clientY - wrapRect.top;
-
-    // Temporarily remove transform so we can measure actual size
-    tipEl.style.transform = "none";
-
-    // Force layout so offsetWidth/Height is correct
-    var tw = tipEl.offsetWidth;
-    var th = tipEl.offsetHeight;
-
-    // Decide above vs below:
-    // If the point is close to the top of the canvas, put tooltip BELOW
-    // (canvas top in wrap coords is canvasRect.top - wrapRect.top)
-    var canvasTopInWrap = canvasRect.top - wrapRect.top;
-    var yInCanvas = clientY - canvasRect.top; // inside canvas
-    var placeBelow = (yInCanvas < 28);        // threshold (tweak if you want)
-
-    // Base placement
-    var top = placeBelow ? (y + 14) : (y - 14 - th);
-    var left = x - (tw / 2);
-
-    // Keep inside left/right bounds of wrap (8px padding)
-    var pad = 8;
-    if (left < pad) left = pad;
-    if (left + tw > wrapRect.width - pad) left = wrapRect.width - pad - tw;
-
-    // Keep inside top/bottom bounds too
-    if (top < pad) top = pad;
-    if (top + th > wrapRect.height - pad) top = wrapRect.height - pad - th;
-
-    tipEl.style.left = left + "px";
-    tipEl.style.top = top + "px";
-
-    // Restore transform look (small lift only when above)
-    tipEl.style.transform = placeBelow ? "translate(0,0)" : "translate(0,0)";
-  }
-
-  canvas.addEventListener("mousemove", function(e){
-    var pt = nearestPoint(e.clientX, e.clientY);
-    if (pt) showTip(pt, e.clientX, e.clientY);
-    else hideTip();
-  });
-  canvas.addEventListener("mouseleave", hideTip);
-
-  // touch
-  canvas.addEventListener("touchstart", function(e){
-    if (!e.touches || !e.touches[0]) return;
-    var t = e.touches[0];
-    var pt = nearestPoint(t.clientX, t.clientY);
-    if (pt) showTip(pt, t.clientX, t.clientY);
-  }, { passive: true });
-
-  canvas.addEventListener("touchmove", function(e){
-    if (!e.touches || !e.touches[0]) return;
-    var t = e.touches[0];
-    var pt = nearestPoint(t.clientX, t.clientY);
-    if (pt) showTip(pt, t.clientX, t.clientY);
-    else hideTip();
-  }, { passive: true });
-
-  canvas.addEventListener("touchend", hideTip, { passive: true });
-}
 
   fetch(WEATHER_JSON_URL, { cache: "no-store" })
     .then(function(r){
@@ -686,11 +718,7 @@ function attachTooltipToCanvas(canvas, tipEl, getStateFn, formatHtmlFn, hitRadiu
 
       if (spark){
         sparkState = drawSparkline(spark, highsF);
-
-        // Add date + value to point objects (by index)
-        sparkState.points.forEach(function(pt){
-          pt.date = highDates[pt.i] || "";
-        });
+        sparkState.points.forEach(function(pt){ pt.date = highDates[pt.i] || ""; });
 
         attachTooltipToCanvas(
           spark,
@@ -703,11 +731,12 @@ function attachTooltipToCanvas(canvas, tipEl, getStateFn, formatHtmlFn, hitRadiu
         );
       }
 
-      // Hourly chart block + tooltip
+      // Hourly chart block + tooltip + NOW LINE
       if (hourly && hourly.length){
         var tempsFh = hourly.map(function(h){ return (h.temperature_c==null)?null:cToF(h.temperature_c); });
         var pops = hourly.map(function(h){ return h.precip_prob_pct; });
         var labels = hourly.map(function(h){ return hourLabelFromTimeStr(h.time); });
+        var hourTimes = hourly.map(function(h){ return parseLocalHourTime(h.time); });
 
         var hourlyHtml =
           "<div class='hourlyPanel'>" +
@@ -726,7 +755,7 @@ function attachTooltipToCanvas(canvas, tipEl, getStateFn, formatHtmlFn, hitRadiu
         var hc = document.getElementById("hourlyChart");
         var tip = document.getElementById("hourlyTip");
 
-        var hourlyState = drawHourly(hc, tempsFh, pops, labels);
+        var hourlyState = drawHourly(hc, tempsFh, pops, labels, hourTimes);
 
         attachTooltipToCanvas(
           hc,
@@ -739,8 +768,14 @@ function attachTooltipToCanvas(canvas, tipEl, getStateFn, formatHtmlFn, hitRadiu
           12
         );
 
+        // keep the "Now" line moving (every minute)
+        setInterval(function(){
+          hourlyState = drawHourly(hc, tempsFh, pops, labels, hourTimes);
+          tip.style.display = "none";
+        }, 60000);
+
         window.addEventListener("resize", function(){
-          hourlyState = drawHourly(hc, tempsFh, pops, labels);
+          hourlyState = drawHourly(hc, tempsFh, pops, labels, hourTimes);
           tip.style.display = "none";
         });
       } else {
