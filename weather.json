@@ -5,15 +5,15 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-01-31T23:43:39+00:00"
+    "generated_utc": "2026-02-01T05:17:39+00:00"
   },
   "current": {
-    "temperature_c": -3.5,
-    "feels_like_c": -8.3,
-    "humidity_pct": 43,
-    "wind_speed_kmh": 9.1,
-    "wind_dir_deg": 7,
-    "wind_gust_kmh": 19.4,
+    "temperature_c": -8.1,
+    "feels_like_c": -12.7,
+    "humidity_pct": 51,
+    "wind_speed_kmh": 6.5,
+    "wind_dir_deg": 236,
+    "wind_gust_kmh": 7.9,
     "weather_code": 0
   },
   "hourly": [
@@ -189,72 +189,72 @@
     },
     {
       "time": "2026-01-31T17:00",
-      "temperature_c": -2.1,
-      "feels_like_c": -7.4,
+      "temperature_c": -1.6,
+      "feels_like_c": -7.1,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 12.2,
-      "wind_dir_deg": 360,
-      "wind_gust_kmh": 20.5,
+      "wind_speed_kmh": 12.5,
+      "wind_dir_deg": 327,
+      "wind_gust_kmh": 27.4,
       "weather_code": 0
     },
     {
       "time": "2026-01-31T18:00",
-      "temperature_c": -4.6,
-      "feels_like_c": -9.5,
+      "temperature_c": -3.8,
+      "feels_like_c": -8.1,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 9.4,
-      "wind_dir_deg": 23,
-      "wind_gust_kmh": 19.8,
+      "wind_speed_kmh": 4.3,
+      "wind_dir_deg": 355,
+      "wind_gust_kmh": 20.2,
       "weather_code": 0
     },
     {
       "time": "2026-01-31T19:00",
-      "temperature_c": -6.2,
-      "feels_like_c": -10.8,
+      "temperature_c": -4.9,
+      "feels_like_c": -8.7,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 7.2,
-      "wind_dir_deg": 357,
-      "wind_gust_kmh": 13.0,
-      "weather_code": 3
+      "wind_speed_kmh": 1.1,
+      "wind_dir_deg": 180,
+      "wind_gust_kmh": 10.1,
+      "weather_code": 0
     },
     {
       "time": "2026-01-31T20:00",
-      "temperature_c": -7.0,
-      "feels_like_c": -11.5,
+      "temperature_c": -5.6,
+      "feels_like_c": -10.0,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 6.6,
-      "wind_dir_deg": 319,
-      "wind_gust_kmh": 12.2,
-      "weather_code": 3
+      "wind_speed_kmh": 5.1,
+      "wind_dir_deg": 176,
+      "wind_gust_kmh": 4.7,
+      "weather_code": 0
     },
     {
       "time": "2026-01-31T21:00",
-      "temperature_c": -7.2,
-      "feels_like_c": -11.6,
+      "temperature_c": -6.7,
+      "feels_like_c": -11.1,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 6.3,
-      "wind_dir_deg": 347,
-      "wind_gust_kmh": 12.6,
+      "wind_speed_kmh": 5.7,
+      "wind_dir_deg": 215,
+      "wind_gust_kmh": 5.4,
       "weather_code": 0
     },
     {
       "time": "2026-01-31T22:00",
-      "temperature_c": -8.1,
-      "feels_like_c": -12.7,
+      "temperature_c": -7.5,
+      "feels_like_c": -12.1,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 7.4,
-      "wind_dir_deg": 331,
-      "wind_gust_kmh": 12.2,
+      "wind_speed_kmh": 7.3,
+      "wind_dir_deg": 250,
+      "wind_gust_kmh": 8.3,
       "weather_code": 0
     },
     {
       "time": "2026-01-31T23:00",
-      "temperature_c": -8.7,
-      "feels_like_c": -13.3,
+      "temperature_c": -7.9,
+      "feels_like_c": -12.8,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 7.3,
-      "wind_dir_deg": 349,
-      "wind_gust_kmh": 14.0,
+      "wind_speed_kmh": 9.0,
+      "wind_dir_deg": 241,
+      "wind_gust_kmh": 10.4,
       "weather_code": 0
     }
   ],
@@ -262,21 +262,21 @@
     {
       "date": "2026-01-31",
       "tmax_c": -0.7,
-      "tmin_c": -8.7,
+      "tmin_c": -7.9,
       "weather_code": 3,
       "precip_prob_pct": 8
     },
     {
       "date": "2026-02-01",
-      "tmax_c": 6.8,
-      "tmin_c": -10.8,
+      "tmax_c": 7.4,
+      "tmin_c": -10.9,
       "weather_code": 3,
-      "precip_prob_pct": 1
+      "precip_prob_pct": 0
     },
     {
       "date": "2026-02-02",
-      "tmax_c": 15.3,
-      "tmin_c": -0.8,
+      "tmax_c": 16.7,
+      "tmin_c": -1.6,
       "weather_code": 3,
       "precip_prob_pct": 0
     },
@@ -285,14 +285,14 @@
       "tmax_c": 12.4,
       "tmin_c": 7.3,
       "weather_code": 80,
-      "precip_prob_pct": 61
+      "precip_prob_pct": 59
     },
     {
       "date": "2026-02-04",
       "tmax_c": 8.5,
       "tmin_c": 1.7,
       "weather_code": 3,
-      "precip_prob_pct": 35
+      "precip_prob_pct": 24
     },
     {
       "date": "2026-02-05",
