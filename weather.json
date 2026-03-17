@@ -5,15 +5,15 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-03-17T21:34:13+00:00"
+    "generated_utc": "2026-03-17T22:29:05+00:00"
   },
   "current": {
     "temperature_c": 11.1,
-    "feels_like_c": 6.4,
-    "humidity_pct": 19,
-    "wind_speed_kmh": 9.4,
-    "wind_dir_deg": 223,
-    "wind_gust_kmh": 20.9,
+    "feels_like_c": 5.9,
+    "humidity_pct": 20,
+    "wind_speed_kmh": 12.7,
+    "wind_dir_deg": 209,
+    "wind_gust_kmh": 16.2,
     "weather_code": 3
   },
   "hourly": [
@@ -170,7 +170,7 @@
     {
       "time": "2026-03-17T15:00",
       "temperature_c": 10.4,
-      "feels_like_c": 7.8,
+      "feels_like_c": 7.9,
       "precip_prob_pct": 0,
       "wind_speed_kmh": 7.1,
       "wind_dir_deg": 210,
@@ -180,7 +180,7 @@
     {
       "time": "2026-03-17T16:00",
       "temperature_c": 11.0,
-      "feels_like_c": 7.4,
+      "feels_like_c": 7.2,
       "precip_prob_pct": 0,
       "wind_speed_kmh": 9.1,
       "wind_dir_deg": 214,
@@ -190,7 +190,7 @@
     {
       "time": "2026-03-17T17:00",
       "temperature_c": 11.2,
-      "feels_like_c": 6.0,
+      "feels_like_c": 6.1,
       "precip_prob_pct": 0,
       "wind_speed_kmh": 12.6,
       "wind_dir_deg": 211,
@@ -200,7 +200,7 @@
     {
       "time": "2026-03-17T18:00",
       "temperature_c": 10.8,
-      "feels_like_c": 5.8,
+      "feels_like_c": 5.9,
       "precip_prob_pct": 0,
       "wind_speed_kmh": 11.6,
       "wind_dir_deg": 202,
@@ -210,8 +210,8 @@
     {
       "time": "2026-03-17T19:00",
       "temperature_c": 9.6,
-      "feels_like_c": 4.8,
-      "precip_prob_pct": 0,
+      "feels_like_c": 4.9,
+      "precip_prob_pct": 1,
       "wind_speed_kmh": 10.2,
       "wind_dir_deg": 188,
       "wind_gust_kmh": 16.2,
@@ -220,7 +220,7 @@
     {
       "time": "2026-03-17T20:00",
       "temperature_c": 7.8,
-      "feels_like_c": 3.5,
+      "feels_like_c": 3.6,
       "precip_prob_pct": 1,
       "wind_speed_kmh": 7.2,
       "wind_dir_deg": 153,
@@ -250,7 +250,7 @@
     {
       "time": "2026-03-17T23:00",
       "temperature_c": 6.3,
-      "feels_like_c": 1.4,
+      "feels_like_c": 1.5,
       "precip_prob_pct": 1,
       "wind_speed_kmh": 11.8,
       "wind_dir_deg": 168,
@@ -271,7 +271,7 @@
       "tmax_c": 21.5,
       "tmin_c": 5.3,
       "weather_code": 3,
-      "precip_prob_pct": 5
+      "precip_prob_pct": 6
     },
     {
       "date": "2026-03-19",
