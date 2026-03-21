@@ -5,15 +5,15 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-03-21T20:21:25+00:00"
+    "generated_utc": "2026-03-21T21:20:50+00:00"
   },
   "current": {
-    "temperature_c": 29.2,
-    "feels_like_c": 29.0,
-    "humidity_pct": 41,
+    "temperature_c": 29.8,
+    "feels_like_c": 28.7,
+    "humidity_pct": 39,
     "wind_speed_kmh": 19.0,
-    "wind_dir_deg": 199,
-    "wind_gust_kmh": 25.2,
+    "wind_dir_deg": 205,
+    "wind_gust_kmh": 28.4,
     "weather_code": 0
   },
   "hourly": [
@@ -159,101 +159,101 @@
     },
     {
       "time": "2026-03-21T14:00",
-      "temperature_c": 28.1,
-      "feels_like_c": 29.1,
+      "temperature_c": 28.3,
+      "feels_like_c": 30.1,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 17.7,
-      "wind_dir_deg": 192,
-      "wind_gust_kmh": 23.4,
+      "wind_speed_kmh": 17.0,
+      "wind_dir_deg": 197,
+      "wind_gust_kmh": 23.0,
       "weather_code": 0
     },
     {
       "time": "2026-03-21T15:00",
-      "temperature_c": 29.0,
-      "feels_like_c": 29.2,
+      "temperature_c": 29.1,
+      "feels_like_c": 29.3,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 18.9,
-      "wind_dir_deg": 198,
-      "wind_gust_kmh": 25.2,
+      "wind_speed_kmh": 19.3,
+      "wind_dir_deg": 201,
+      "wind_gust_kmh": 25.6,
       "weather_code": 0
     },
     {
       "time": "2026-03-21T16:00",
-      "temperature_c": 29.5,
-      "feels_like_c": 28.9,
+      "temperature_c": 29.7,
+      "feels_like_c": 29.2,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 18.4,
-      "wind_dir_deg": 203,
-      "wind_gust_kmh": 24.5,
-      "weather_code": 0
-    },
-    {
-      "time": "2026-03-21T17:00",
-      "temperature_c": 29.8,
-      "feels_like_c": 28.2,
-      "precip_prob_pct": 0,
-      "wind_speed_kmh": 18.2,
+      "wind_speed_kmh": 18.7,
       "wind_dir_deg": 205,
-      "wind_gust_kmh": 26.6,
-      "weather_code": 0
-    },
-    {
-      "time": "2026-03-21T18:00",
-      "temperature_c": 29.3,
-      "feels_like_c": 27.5,
-      "precip_prob_pct": 0,
-      "wind_speed_kmh": 17.3,
-      "wind_dir_deg": 211,
-      "wind_gust_kmh": 26.3,
-      "weather_code": 0
-    },
-    {
-      "time": "2026-03-21T19:00",
-      "temperature_c": 27.1,
-      "feels_like_c": 25.9,
-      "precip_prob_pct": 0,
-      "wind_speed_kmh": 11.8,
-      "wind_dir_deg": 203,
-      "wind_gust_kmh": 28.1,
-      "weather_code": 0
-    },
-    {
-      "time": "2026-03-21T20:00",
-      "temperature_c": 24.8,
-      "feels_like_c": 23.6,
-      "precip_prob_pct": 0,
-      "wind_speed_kmh": 11.6,
-      "wind_dir_deg": 187,
-      "wind_gust_kmh": 24.5,
-      "weather_code": 0
-    },
-    {
-      "time": "2026-03-21T21:00",
-      "temperature_c": 23.6,
-      "feels_like_c": 22.6,
-      "precip_prob_pct": 0,
-      "wind_speed_kmh": 11.6,
-      "wind_dir_deg": 187,
       "wind_gust_kmh": 25.2,
       "weather_code": 0
     },
     {
-      "time": "2026-03-21T22:00",
-      "temperature_c": 22.8,
-      "feels_like_c": 21.5,
+      "time": "2026-03-21T17:00",
+      "temperature_c": 30.1,
+      "feels_like_c": 28.3,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 13.4,
-      "wind_dir_deg": 194,
-      "wind_gust_kmh": 28.8,
+      "wind_speed_kmh": 18.4,
+      "wind_dir_deg": 208,
+      "wind_gust_kmh": 27.7,
+      "weather_code": 0
+    },
+    {
+      "time": "2026-03-21T18:00",
+      "temperature_c": 29.5,
+      "feels_like_c": 27.7,
+      "precip_prob_pct": 0,
+      "wind_speed_kmh": 17.6,
+      "wind_dir_deg": 208,
+      "wind_gust_kmh": 26.6,
+      "weather_code": 0
+    },
+    {
+      "time": "2026-03-21T19:00",
+      "temperature_c": 27.3,
+      "feels_like_c": 26.0,
+      "precip_prob_pct": 0,
+      "wind_speed_kmh": 11.4,
+      "wind_dir_deg": 198,
+      "wind_gust_kmh": 27.7,
+      "weather_code": 0
+    },
+    {
+      "time": "2026-03-21T20:00",
+      "temperature_c": 25.0,
+      "feels_like_c": 23.6,
+      "precip_prob_pct": 0,
+      "wind_speed_kmh": 12.4,
+      "wind_dir_deg": 188,
+      "wind_gust_kmh": 25.9,
+      "weather_code": 0
+    },
+    {
+      "time": "2026-03-21T21:00",
+      "temperature_c": 23.8,
+      "feels_like_c": 22.6,
+      "precip_prob_pct": 0,
+      "wind_speed_kmh": 12.3,
+      "wind_dir_deg": 187,
+      "wind_gust_kmh": 26.3,
+      "weather_code": 0
+    },
+    {
+      "time": "2026-03-21T22:00",
+      "temperature_c": 23.0,
+      "feels_like_c": 21.7,
+      "precip_prob_pct": 0,
+      "wind_speed_kmh": 13.8,
+      "wind_dir_deg": 200,
+      "wind_gust_kmh": 28.1,
       "weather_code": 0
     },
     {
       "time": "2026-03-21T23:00",
-      "temperature_c": 22.2,
-      "feels_like_c": 20.6,
+      "temperature_c": 22.4,
+      "feels_like_c": 20.8,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 15.2,
-      "wind_dir_deg": 202,
+      "wind_speed_kmh": 15.1,
+      "wind_dir_deg": 205,
       "wind_gust_kmh": 29.2,
       "weather_code": 0
     }
@@ -261,7 +261,7 @@
   "daily": [
     {
       "date": "2026-03-21",
-      "tmax_c": 29.8,
+      "tmax_c": 30.1,
       "tmin_c": 15.9,
       "weather_code": 1,
       "precip_prob_pct": 0
@@ -269,7 +269,7 @@
     {
       "date": "2026-03-22",
       "tmax_c": 30.8,
-      "tmin_c": 17.4,
+      "tmin_c": 17.5,
       "weather_code": 0,
       "precip_prob_pct": 0
     },
