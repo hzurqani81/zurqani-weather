@@ -5,15 +5,15 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-03-23T19:45:00+00:00"
+    "generated_utc": "2026-03-23T20:34:05+00:00"
   },
   "current": {
-    "temperature_c": 20.3,
-    "feels_like_c": 16.1,
-    "humidity_pct": 24,
-    "wind_speed_kmh": 22.2,
-    "wind_dir_deg": 32,
-    "wind_gust_kmh": 31.0,
+    "temperature_c": 20.7,
+    "feels_like_c": 16.2,
+    "humidity_pct": 22,
+    "wind_speed_kmh": 21.5,
+    "wind_dir_deg": 35,
+    "wind_gust_kmh": 29.5,
     "weather_code": 0
   },
   "hourly": [
