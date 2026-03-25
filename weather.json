@@ -5,16 +5,16 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-03-25T21:34:57+00:00"
+    "generated_utc": "2026-03-25T22:31:34+00:00"
   },
   "current": {
-    "temperature_c": 29.2,
-    "feels_like_c": 28.0,
+    "temperature_c": 28.7,
+    "feels_like_c": 27.1,
     "humidity_pct": 36,
-    "wind_speed_kmh": 14.7,
-    "wind_dir_deg": 197,
-    "wind_gust_kmh": 18.7,
-    "weather_code": 1
+    "wind_speed_kmh": 15.9,
+    "wind_dir_deg": 185,
+    "wind_gust_kmh": 20.5,
+    "weather_code": 0
   },
   "hourly": [
     {
@@ -170,7 +170,7 @@
     {
       "time": "2026-03-25T15:00",
       "temperature_c": 29.0,
-      "feels_like_c": 29.8,
+      "feels_like_c": 30.2,
       "precip_prob_pct": 0,
       "wind_speed_kmh": 10.7,
       "wind_dir_deg": 200,
@@ -211,7 +211,7 @@
       "time": "2026-03-25T19:00",
       "temperature_c": 26.7,
       "feels_like_c": 25.3,
-      "precip_prob_pct": 1,
+      "precip_prob_pct": 0,
       "wind_speed_kmh": 11.2,
       "wind_dir_deg": 182,
       "wind_gust_kmh": 22.3,
@@ -221,7 +221,7 @@
       "time": "2026-03-25T20:00",
       "temperature_c": 24.3,
       "feels_like_c": 23.0,
-      "precip_prob_pct": 1,
+      "precip_prob_pct": 0,
       "wind_speed_kmh": 10.1,
       "wind_dir_deg": 180,
       "wind_gust_kmh": 18.7,
@@ -230,8 +230,8 @@
     {
       "time": "2026-03-25T21:00",
       "temperature_c": 22.9,
-      "feels_like_c": 21.6,
-      "precip_prob_pct": 1,
+      "feels_like_c": 21.7,
+      "precip_prob_pct": 0,
       "wind_speed_kmh": 10.2,
       "wind_dir_deg": 198,
       "wind_gust_kmh": 23.8,
@@ -240,8 +240,8 @@
     {
       "time": "2026-03-25T22:00",
       "temperature_c": 21.8,
-      "feels_like_c": 20.8,
-      "precip_prob_pct": 1,
+      "feels_like_c": 20.9,
+      "precip_prob_pct": 0,
       "wind_speed_kmh": 9.6,
       "wind_dir_deg": 193,
       "wind_gust_kmh": 22.0,
@@ -250,7 +250,7 @@
     {
       "time": "2026-03-25T23:00",
       "temperature_c": 21.0,
-      "feels_like_c": 19.8,
+      "feels_like_c": 20.1,
       "precip_prob_pct": 0,
       "wind_speed_kmh": 11.2,
       "wind_dir_deg": 182,
