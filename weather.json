@@ -5,15 +5,15 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-03-28T16:28:42+00:00"
+    "generated_utc": "2026-03-28T17:24:50+00:00"
   },
   "current": {
-    "temperature_c": 12.8,
-    "feels_like_c": 8.2,
-    "humidity_pct": 37,
-    "wind_speed_kmh": 22.8,
-    "wind_dir_deg": 55,
-    "wind_gust_kmh": 32.4,
+    "temperature_c": 14.3,
+    "feels_like_c": 10.7,
+    "humidity_pct": 31,
+    "wind_speed_kmh": 19.5,
+    "wind_dir_deg": 52,
+    "wind_gust_kmh": 26.3,
     "weather_code": 0
   },
   "hourly": [
@@ -120,7 +120,7 @@
     {
       "time": "2026-03-28T10:00",
       "temperature_c": 11.6,
-      "feels_like_c": 5.8,
+      "feels_like_c": 5.9,
       "precip_prob_pct": 0,
       "wind_speed_kmh": 24.3,
       "wind_dir_deg": 61,
@@ -140,7 +140,7 @@
     {
       "time": "2026-03-28T12:00",
       "temperature_c": 13.9,
-      "feels_like_c": 9.9,
+      "feels_like_c": 9.8,
       "precip_prob_pct": 0,
       "wind_speed_kmh": 20.3,
       "wind_dir_deg": 53,
@@ -170,7 +170,7 @@
     {
       "time": "2026-03-28T15:00",
       "temperature_c": 17.6,
-      "feels_like_c": 14.5,
+      "feels_like_c": 14.4,
       "precip_prob_pct": 0,
       "wind_speed_kmh": 16.1,
       "wind_dir_deg": 48,
@@ -270,8 +270,8 @@
       "date": "2026-03-29",
       "tmax_c": 26.3,
       "tmin_c": 7.1,
-      "weather_code": 1,
-      "precip_prob_pct": 2
+      "weather_code": 0,
+      "precip_prob_pct": 3
     },
     {
       "date": "2026-03-30",
