@@ -5,15 +5,15 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-05-16T23:48:23+00:00"
+    "generated_utc": "2026-05-17T02:42:43+00:00"
   },
   "current": {
-    "temperature_c": 29.0,
-    "feels_like_c": 27.9,
-    "humidity_pct": 42,
-    "wind_speed_kmh": 17.9,
-    "wind_dir_deg": 171,
-    "wind_gust_kmh": 28.4,
+    "temperature_c": 24.6,
+    "feels_like_c": 24.8,
+    "humidity_pct": 56,
+    "wind_speed_kmh": 11.2,
+    "wind_dir_deg": 165,
+    "wind_gust_kmh": 22.7,
     "weather_code": 0
   },
   "hourly": [
@@ -199,62 +199,62 @@
     },
     {
       "time": "2026-05-16T18:00",
-      "temperature_c": 29.7,
-      "feels_like_c": 28.6,
+      "temperature_c": 29.9,
+      "feels_like_c": 29.0,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 19.5,
-      "wind_dir_deg": 176,
-      "wind_gust_kmh": 28.4,
+      "wind_speed_kmh": 20.3,
+      "wind_dir_deg": 173,
+      "wind_gust_kmh": 29.9,
       "weather_code": 0
     },
     {
       "time": "2026-05-16T19:00",
-      "temperature_c": 28.6,
-      "feels_like_c": 27.6,
+      "temperature_c": 28.7,
+      "feels_like_c": 27.8,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 17.5,
-      "wind_dir_deg": 172,
-      "wind_gust_kmh": 29.5,
+      "wind_speed_kmh": 17.1,
+      "wind_dir_deg": 173,
+      "wind_gust_kmh": 29.2,
       "weather_code": 0
     },
     {
       "time": "2026-05-16T20:00",
-      "temperature_c": 26.1,
-      "feels_like_c": 26.1,
+      "temperature_c": 27.0,
+      "feels_like_c": 27.1,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 11.3,
-      "wind_dir_deg": 163,
-      "wind_gust_kmh": 19.4,
+      "wind_speed_kmh": 10.3,
+      "wind_dir_deg": 168,
+      "wind_gust_kmh": 26.6,
       "weather_code": 0
     },
     {
       "time": "2026-05-16T21:00",
-      "temperature_c": 24.5,
-      "feels_like_c": 25.0,
+      "temperature_c": 25.1,
+      "feels_like_c": 25.3,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 10.1,
-      "wind_dir_deg": 153,
-      "wind_gust_kmh": 20.9,
+      "wind_speed_kmh": 10.5,
+      "wind_dir_deg": 164,
+      "wind_gust_kmh": 21.2,
       "weather_code": 0
     },
     {
       "time": "2026-05-16T22:00",
-      "temperature_c": 23.8,
+      "temperature_c": 24.2,
       "feels_like_c": 24.2,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 12.8,
-      "wind_dir_deg": 158,
-      "wind_gust_kmh": 26.3,
+      "wind_speed_kmh": 12.0,
+      "wind_dir_deg": 164,
+      "wind_gust_kmh": 24.8,
       "weather_code": 0
     },
     {
       "time": "2026-05-16T23:00",
-      "temperature_c": 23.5,
-      "feels_like_c": 23.3,
+      "temperature_c": 23.8,
+      "feels_like_c": 23.9,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 14.3,
-      "wind_dir_deg": 162,
-      "wind_gust_kmh": 27.7,
+      "wind_speed_kmh": 12.7,
+      "wind_dir_deg": 165,
+      "wind_gust_kmh": 27.0,
       "weather_code": 0
     }
   ],
@@ -268,14 +268,14 @@
     },
     {
       "date": "2026-05-17",
-      "tmax_c": 31.2,
-      "tmin_c": 19.7,
+      "tmax_c": 29.4,
+      "tmin_c": 19.9,
       "weather_code": 3,
-      "precip_prob_pct": 15
+      "precip_prob_pct": 17
     },
     {
       "date": "2026-05-18",
-      "tmax_c": 32.1,
+      "tmax_c": 32.5,
       "tmin_c": 22.6,
       "weather_code": 53,
       "precip_prob_pct": 20
