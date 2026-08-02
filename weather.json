@@ -5,15 +5,15 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-08-02T21:50:51+00:00"
+    "generated_utc": "2026-08-02T22:51:47+00:00"
   },
   "current": {
-    "temperature_c": 29.5,
-    "feels_like_c": 31.6,
+    "temperature_c": 29.3,
+    "feels_like_c": 31.0,
     "humidity_pct": 53,
-    "wind_speed_kmh": 11.5,
-    "wind_dir_deg": 2,
-    "wind_gust_kmh": 18.4,
+    "wind_speed_kmh": 10.5,
+    "wind_dir_deg": 6,
+    "wind_gust_kmh": 17.6,
     "weather_code": 0
   },
   "hourly": [
@@ -179,89 +179,89 @@
     },
     {
       "time": "2026-08-02T16:00",
-      "temperature_c": 29.5,
-      "feels_like_c": 32.3,
+      "temperature_c": 29.3,
+      "feels_like_c": 32.5,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 11.5,
-      "wind_dir_deg": 356,
-      "wind_gust_kmh": 17.6,
-      "weather_code": 0
+      "wind_speed_kmh": 9.4,
+      "wind_dir_deg": 360,
+      "wind_gust_kmh": 15.8,
+      "weather_code": 3
     },
     {
       "time": "2026-08-02T17:00",
-      "temperature_c": 29.5,
-      "feels_like_c": 31.6,
+      "temperature_c": 29.4,
+      "feels_like_c": 31.5,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 10.8,
+      "wind_speed_kmh": 10.1,
       "wind_dir_deg": 4,
-      "wind_gust_kmh": 18.0,
-      "weather_code": 0
+      "wind_gust_kmh": 17.6,
+      "weather_code": 1
     },
     {
       "time": "2026-08-02T18:00",
-      "temperature_c": 29.4,
-      "feels_like_c": 31.2,
+      "temperature_c": 29.3,
+      "feels_like_c": 31.1,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 9.1,
+      "wind_speed_kmh": 9.5,
       "wind_dir_deg": 9,
-      "wind_gust_kmh": 16.2,
+      "wind_gust_kmh": 16.9,
       "weather_code": 0
     },
     {
       "time": "2026-08-02T19:00",
-      "temperature_c": 28.3,
-      "feels_like_c": 30.6,
+      "temperature_c": 28.1,
+      "feels_like_c": 30.4,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 6.8,
-      "wind_dir_deg": 25,
-      "wind_gust_kmh": 14.4,
+      "wind_speed_kmh": 8.4,
+      "wind_dir_deg": 20,
+      "wind_gust_kmh": 16.2,
       "weather_code": 0
     },
     {
       "time": "2026-08-02T20:00",
-      "temperature_c": 26.6,
-      "feels_like_c": 29.2,
+      "temperature_c": 26.4,
+      "feels_like_c": 29.1,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 6.2,
-      "wind_dir_deg": 21,
-      "wind_gust_kmh": 15.5,
+      "wind_speed_kmh": 5.8,
+      "wind_dir_deg": 22,
+      "wind_gust_kmh": 16.2,
       "weather_code": 0
     },
     {
       "time": "2026-08-02T21:00",
-      "temperature_c": 25.5,
-      "feels_like_c": 27.8,
+      "temperature_c": 25.3,
+      "feels_like_c": 27.6,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 6.8,
-      "wind_dir_deg": 25,
-      "wind_gust_kmh": 14.8,
+      "wind_speed_kmh": 6.3,
+      "wind_dir_deg": 24,
+      "wind_gust_kmh": 15.1,
       "weather_code": 0
     },
     {
       "time": "2026-08-02T22:00",
-      "temperature_c": 24.7,
-      "feels_like_c": 26.9,
+      "temperature_c": 24.4,
+      "feels_like_c": 26.5,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 6.1,
-      "wind_dir_deg": 40,
-      "wind_gust_kmh": 14.8,
+      "wind_speed_kmh": 6.9,
+      "wind_dir_deg": 39,
+      "wind_gust_kmh": 16.9,
       "weather_code": 0
     },
     {
       "time": "2026-08-02T23:00",
-      "temperature_c": 24.1,
-      "feels_like_c": 26.2,
+      "temperature_c": 23.9,
+      "feels_like_c": 25.8,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 6.6,
-      "wind_dir_deg": 61,
-      "wind_gust_kmh": 16.2,
+      "wind_speed_kmh": 6.0,
+      "wind_dir_deg": 57,
+      "wind_gust_kmh": 16.6,
       "weather_code": 0
     }
   ],
   "daily": [
     {
       "date": "2026-08-02",
-      "tmax_c": 29.5,
+      "tmax_c": 29.4,
       "tmin_c": 21.5,
       "weather_code": 3,
       "precip_prob_pct": 0
@@ -269,7 +269,7 @@
     {
       "date": "2026-08-03",
       "tmax_c": 32.7,
-      "tmin_c": 20.9,
+      "tmin_c": 20.8,
       "weather_code": 1,
       "precip_prob_pct": 0
     },
