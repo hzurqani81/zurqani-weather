@@ -5,15 +5,15 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-08-08T03:20:32+00:00"
+    "generated_utc": "2026-08-08T04:51:33+00:00"
   },
   "current": {
-    "temperature_c": 24.9,
-    "feels_like_c": 28.8,
-    "humidity_pct": 84,
-    "wind_speed_kmh": 6.9,
-    "wind_dir_deg": 231,
-    "wind_gust_kmh": 19.8,
+    "temperature_c": 23.5,
+    "feels_like_c": 27.0,
+    "humidity_pct": 86,
+    "wind_speed_kmh": 5.9,
+    "wind_dir_deg": 169,
+    "wind_gust_kmh": 12.2,
     "weather_code": 3
   },
   "hourly": [
@@ -229,32 +229,32 @@
     },
     {
       "time": "2026-08-07T21:00",
-      "temperature_c": 25.3,
-      "feels_like_c": 29.4,
+      "temperature_c": 24.7,
+      "feels_like_c": 29.0,
       "precip_prob_pct": 23,
-      "wind_speed_kmh": 3.8,
-      "wind_dir_deg": 197,
-      "wind_gust_kmh": 14.8,
+      "wind_speed_kmh": 4.0,
+      "wind_dir_deg": 260,
+      "wind_gust_kmh": 12.6,
       "weather_code": 3
     },
     {
       "time": "2026-08-07T22:00",
-      "temperature_c": 24.9,
+      "temperature_c": 24.4,
       "feels_like_c": 28.6,
       "precip_prob_pct": 16,
-      "wind_speed_kmh": 7.9,
-      "wind_dir_deg": 219,
-      "wind_gust_kmh": 20.5,
+      "wind_speed_kmh": 4.0,
+      "wind_dir_deg": 265,
+      "wind_gust_kmh": 18.0,
       "weather_code": 3
     },
     {
       "time": "2026-08-07T23:00",
-      "temperature_c": 25.0,
-      "feels_like_c": 29.6,
-      "precip_prob_pct": 13,
-      "wind_speed_kmh": 3.7,
-      "wind_dir_deg": 61,
-      "wind_gust_kmh": 9.4,
+      "temperature_c": 23.9,
+      "feels_like_c": 27.5,
+      "precip_prob_pct": 8,
+      "wind_speed_kmh": 5.8,
+      "wind_dir_deg": 184,
+      "wind_gust_kmh": 15.8,
       "weather_code": 3
     }
   ],
@@ -268,10 +268,10 @@
     },
     {
       "date": "2026-08-08",
-      "tmax_c": 32.5,
-      "tmin_c": 23.8,
-      "weather_code": 53,
-      "precip_prob_pct": 27
+      "tmax_c": 32.1,
+      "tmin_c": 22.7,
+      "weather_code": 3,
+      "precip_prob_pct": 26
     },
     {
       "date": "2026-08-09",
