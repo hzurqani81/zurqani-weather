@@ -5,16 +5,16 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-08-09T03:28:53+00:00"
+    "generated_utc": "2026-08-09T04:59:11+00:00"
   },
   "current": {
-    "temperature_c": 25.1,
-    "feels_like_c": 29.2,
-    "humidity_pct": 82,
-    "wind_speed_kmh": 5.2,
-    "wind_dir_deg": 286,
-    "wind_gust_kmh": 8.6,
-    "weather_code": 3
+    "temperature_c": 24.9,
+    "feels_like_c": 29.9,
+    "humidity_pct": 89,
+    "wind_speed_kmh": 3.0,
+    "wind_dir_deg": 194,
+    "wind_gust_kmh": 6.8,
+    "weather_code": 2
   },
   "hourly": [
     {
@@ -239,22 +239,22 @@
     },
     {
       "time": "2026-08-08T22:00",
-      "temperature_c": 25.3,
-      "feels_like_c": 29.6,
+      "temperature_c": 25.1,
+      "feels_like_c": 29.9,
       "precip_prob_pct": 5,
-      "wind_speed_kmh": 4.3,
-      "wind_dir_deg": 246,
-      "wind_gust_kmh": 10.1,
-      "weather_code": 3
+      "wind_speed_kmh": 2.1,
+      "wind_dir_deg": 149,
+      "wind_gust_kmh": 7.9,
+      "weather_code": 1
     },
     {
       "time": "2026-08-08T23:00",
-      "temperature_c": 24.9,
-      "feels_like_c": 29.2,
-      "precip_prob_pct": 4,
-      "wind_speed_kmh": 2.3,
-      "wind_dir_deg": 219,
-      "wind_gust_kmh": 6.1,
+      "temperature_c": 25.3,
+      "feels_like_c": 30.3,
+      "precip_prob_pct": 2,
+      "wind_speed_kmh": 2.1,
+      "wind_dir_deg": 211,
+      "wind_gust_kmh": 4.7,
       "weather_code": 3
     }
   ],
@@ -268,8 +268,8 @@
     },
     {
       "date": "2026-08-09",
-      "tmax_c": 33.4,
-      "tmin_c": 22.4,
+      "tmax_c": 34.5,
+      "tmin_c": 22.5,
       "weather_code": 3,
       "precip_prob_pct": 14
     },
