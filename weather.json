@@ -5,15 +5,15 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-08-16T02:54:51+00:00"
+    "generated_utc": "2026-08-16T03:42:47+00:00"
   },
   "current": {
-    "temperature_c": 31.3,
-    "feels_like_c": 34.6,
-    "humidity_pct": 56,
-    "wind_speed_kmh": 9.1,
-    "wind_dir_deg": 173,
-    "wind_gust_kmh": 18.4,
+    "temperature_c": 30.0,
+    "feels_like_c": 34.2,
+    "humidity_pct": 67,
+    "wind_speed_kmh": 9.6,
+    "wind_dir_deg": 193,
+    "wind_gust_kmh": 23.8,
     "weather_code": 0
   },
   "hourly": [
@@ -229,32 +229,32 @@
     },
     {
       "time": "2026-08-15T21:00",
-      "temperature_c": 32.2,
-      "feels_like_c": 34.9,
+      "temperature_c": 31.5,
+      "feels_like_c": 34.4,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 8.0,
-      "wind_dir_deg": 175,
-      "wind_gust_kmh": 19.1,
-      "weather_code": 0
-    },
-    {
-      "time": "2026-08-15T22:00",
-      "temperature_c": 31.1,
-      "feels_like_c": 34.7,
-      "precip_prob_pct": 0,
-      "wind_speed_kmh": 9.0,
-      "wind_dir_deg": 175,
+      "wind_speed_kmh": 7.2,
+      "wind_dir_deg": 198,
       "wind_gust_kmh": 18.4,
       "weather_code": 0
     },
     {
-      "time": "2026-08-15T23:00",
-      "temperature_c": 30.5,
-      "feels_like_c": 34.1,
+      "time": "2026-08-15T22:00",
+      "temperature_c": 30.4,
+      "feels_like_c": 34.7,
       "precip_prob_pct": 0,
-      "wind_speed_kmh": 9.7,
-      "wind_dir_deg": 180,
-      "wind_gust_kmh": 20.2,
+      "wind_speed_kmh": 8.4,
+      "wind_dir_deg": 190,
+      "wind_gust_kmh": 22.3,
+      "weather_code": 0
+    },
+    {
+      "time": "2026-08-15T23:00",
+      "temperature_c": 29.8,
+      "feels_like_c": 34.0,
+      "precip_prob_pct": 0,
+      "wind_speed_kmh": 10.2,
+      "wind_dir_deg": 198,
+      "wind_gust_kmh": 24.8,
       "weather_code": 0
     }
   ],
@@ -269,9 +269,9 @@
     {
       "date": "2026-08-16",
       "tmax_c": 39.6,
-      "tmin_c": 27.1,
+      "tmin_c": 26.3,
       "weather_code": 1,
-      "precip_prob_pct": 4
+      "precip_prob_pct": 3
     },
     {
       "date": "2026-08-17",
