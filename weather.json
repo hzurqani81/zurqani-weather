@@ -5,16 +5,16 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-08-22T03:36:55+00:00"
+    "generated_utc": "2026-08-22T04:27:32+00:00"
   },
   "current": {
-    "temperature_c": 27.4,
-    "feels_like_c": 30.6,
-    "humidity_pct": 63,
-    "wind_speed_kmh": 3.3,
-    "wind_dir_deg": 103,
-    "wind_gust_kmh": 7.2,
-    "weather_code": 0
+    "temperature_c": 27.1,
+    "feels_like_c": 30.1,
+    "humidity_pct": 68,
+    "wind_speed_kmh": 7.7,
+    "wind_dir_deg": 127,
+    "wind_gust_kmh": 11.2,
+    "weather_code": 3
   },
   "hourly": [
     {
@@ -230,7 +230,7 @@
     {
       "time": "2026-08-21T21:00",
       "temperature_c": 27.4,
-      "feels_like_c": 30.9,
+      "feels_like_c": 31.9,
       "precip_prob_pct": 0,
       "wind_speed_kmh": 1.1,
       "wind_dir_deg": 90,
@@ -240,22 +240,22 @@
     {
       "time": "2026-08-21T22:00",
       "temperature_c": 27.4,
-      "feels_like_c": 30.7,
+      "feels_like_c": 31.6,
       "precip_prob_pct": 0,
       "wind_speed_kmh": 2.1,
       "wind_dir_deg": 121,
       "wind_gust_kmh": 5.4,
-      "weather_code": 0
+      "weather_code": 3
     },
     {
       "time": "2026-08-21T23:00",
       "temperature_c": 27.3,
-      "feels_like_c": 30.4,
+      "feels_like_c": 30.6,
       "precip_prob_pct": 0,
       "wind_speed_kmh": 5.7,
       "wind_dir_deg": 108,
       "wind_gust_kmh": 9.7,
-      "weather_code": 1
+      "weather_code": 2
     }
   ],
   "daily": [
@@ -278,35 +278,35 @@
       "tmax_c": 37.1,
       "tmin_c": 23.8,
       "weather_code": 61,
-      "precip_prob_pct": 14
+      "precip_prob_pct": 12
     },
     {
       "date": "2026-08-24",
       "tmax_c": 29.7,
       "tmin_c": 21.7,
       "weather_code": 81,
-      "precip_prob_pct": 48
+      "precip_prob_pct": 39
     },
     {
       "date": "2026-08-25",
       "tmax_c": 39.7,
       "tmin_c": 23.6,
       "weather_code": 3,
-      "precip_prob_pct": 19
+      "precip_prob_pct": 11
     },
     {
       "date": "2026-08-26",
       "tmax_c": 36.9,
       "tmin_c": 23.2,
       "weather_code": 80,
-      "precip_prob_pct": 29
+      "precip_prob_pct": 23
     },
     {
       "date": "2026-08-27",
       "tmax_c": 38.0,
       "tmin_c": 21.7,
       "weather_code": 55,
-      "precip_prob_pct": 29
+      "precip_prob_pct": 23
     }
   ]
 }
