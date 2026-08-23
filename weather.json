@@ -5,15 +5,15 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-08-23T01:02:23+00:00"
+    "generated_utc": "2026-08-23T02:57:03+00:00"
   },
   "current": {
-    "temperature_c": 32.5,
-    "feels_like_c": 36.1,
-    "humidity_pct": 53,
-    "wind_speed_kmh": 7.9,
-    "wind_dir_deg": 114,
-    "wind_gust_kmh": 8.6,
+    "temperature_c": 27.8,
+    "feels_like_c": 28.8,
+    "humidity_pct": 60,
+    "wind_speed_kmh": 17.1,
+    "wind_dir_deg": 55,
+    "wind_gust_kmh": 37.4,
     "weather_code": 3
   },
   "hourly": [
@@ -209,52 +209,52 @@
     },
     {
       "time": "2026-08-22T19:00",
-      "temperature_c": 35.3,
-      "feels_like_c": 39.2,
+      "temperature_c": 33.5,
+      "feels_like_c": 38.0,
       "precip_prob_pct": 1,
-      "wind_speed_kmh": 6.2,
-      "wind_dir_deg": 170,
-      "wind_gust_kmh": 11.5,
+      "wind_speed_kmh": 6.3,
+      "wind_dir_deg": 121,
+      "wind_gust_kmh": 7.6,
       "weather_code": 3
     },
     {
       "time": "2026-08-22T20:00",
-      "temperature_c": 32.5,
-      "feels_like_c": 36.1,
-      "precip_prob_pct": 6,
-      "wind_speed_kmh": 7.9,
-      "wind_dir_deg": 114,
-      "wind_gust_kmh": 8.6,
+      "temperature_c": 29.8,
+      "feels_like_c": 34.2,
+      "precip_prob_pct": 5,
+      "wind_speed_kmh": 5.0,
+      "wind_dir_deg": 150,
+      "wind_gust_kmh": 10.8,
       "weather_code": 3
     },
     {
       "time": "2026-08-22T21:00",
-      "temperature_c": 28.8,
-      "feels_like_c": 31.1,
-      "precip_prob_pct": 10,
-      "wind_speed_kmh": 23.1,
-      "wind_dir_deg": 59,
-      "wind_gust_kmh": 44.6,
-      "weather_code": 3
+      "temperature_c": 28.9,
+      "feels_like_c": 28.8,
+      "precip_prob_pct": 13,
+      "wind_speed_kmh": 20.9,
+      "wind_dir_deg": 75,
+      "wind_gust_kmh": 39.2,
+      "weather_code": 2
     },
     {
       "time": "2026-08-22T22:00",
-      "temperature_c": 27.7,
-      "feels_like_c": 31.0,
-      "precip_prob_pct": 10,
-      "wind_speed_kmh": 15.0,
-      "wind_dir_deg": 66,
-      "wind_gust_kmh": 34.9,
+      "temperature_c": 27.5,
+      "feels_like_c": 29.1,
+      "precip_prob_pct": 16,
+      "wind_speed_kmh": 14.8,
+      "wind_dir_deg": 39,
+      "wind_gust_kmh": 32.0,
       "weather_code": 3
     },
     {
       "time": "2026-08-22T23:00",
-      "temperature_c": 27.4,
-      "feels_like_c": 30.5,
-      "precip_prob_pct": 13,
-      "wind_speed_kmh": 10.7,
-      "wind_dir_deg": 57,
-      "wind_gust_kmh": 25.6,
+      "temperature_c": 26.9,
+      "feels_like_c": 28.2,
+      "precip_prob_pct": 22,
+      "wind_speed_kmh": 17.1,
+      "wind_dir_deg": 42,
+      "wind_gust_kmh": 36.7,
       "weather_code": 3
     }
   ],
@@ -264,49 +264,49 @@
       "tmax_c": 38.4,
       "tmin_c": 23.0,
       "weather_code": 3,
-      "precip_prob_pct": 13
+      "precip_prob_pct": 22
     },
     {
       "date": "2026-08-23",
-      "tmax_c": 36.3,
-      "tmin_c": 23.4,
-      "weather_code": 65,
-      "precip_prob_pct": 27
+      "tmax_c": 37.1,
+      "tmin_c": 23.5,
+      "weather_code": 3,
+      "precip_prob_pct": 32
     },
     {
       "date": "2026-08-24",
-      "tmax_c": 30.6,
-      "tmin_c": 23.4,
-      "weather_code": 63,
-      "precip_prob_pct": 36
+      "tmax_c": 28.1,
+      "tmin_c": 22.9,
+      "weather_code": 53,
+      "precip_prob_pct": 41
     },
     {
       "date": "2026-08-25",
       "tmax_c": 39.5,
       "tmin_c": 21.6,
       "weather_code": 53,
-      "precip_prob_pct": 7
+      "precip_prob_pct": 24
     },
     {
       "date": "2026-08-26",
       "tmax_c": 40.4,
       "tmin_c": 25.1,
       "weather_code": 51,
-      "precip_prob_pct": 33
+      "precip_prob_pct": 34
     },
     {
       "date": "2026-08-27",
       "tmax_c": 39.4,
       "tmin_c": 22.4,
       "weather_code": 80,
-      "precip_prob_pct": 33
+      "precip_prob_pct": 34
     },
     {
       "date": "2026-08-28",
       "tmax_c": 37.7,
       "tmin_c": 21.6,
       "weather_code": 53,
-      "precip_prob_pct": 8
+      "precip_prob_pct": 15
     }
   ]
 }
