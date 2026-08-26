@@ -5,15 +5,15 @@
     "lon": -91.7909,
     "timezone": "America/Chicago",
     "source": "open-meteo",
-    "generated_utc": "2026-08-26T02:59:33+00:00"
+    "generated_utc": "2026-08-26T03:57:19+00:00"
   },
   "current": {
-    "temperature_c": 27.2,
-    "feels_like_c": 31.9,
-    "humidity_pct": 82,
-    "wind_speed_kmh": 9.0,
-    "wind_dir_deg": 182,
-    "wind_gust_kmh": 19.8,
+    "temperature_c": 26.2,
+    "feels_like_c": 30.3,
+    "humidity_pct": 83,
+    "wind_speed_kmh": 9.9,
+    "wind_dir_deg": 199,
+    "wind_gust_kmh": 21.6,
     "weather_code": 0
   },
   "hourly": [
@@ -229,32 +229,32 @@
     },
     {
       "time": "2026-08-25T21:00",
-      "temperature_c": 27.6,
-      "feels_like_c": 32.3,
+      "temperature_c": 26.9,
+      "feels_like_c": 31.9,
       "precip_prob_pct": 1,
-      "wind_speed_kmh": 8.4,
+      "wind_speed_kmh": 9.4,
       "wind_dir_deg": 173,
-      "wind_gust_kmh": 18.7,
-      "weather_code": 0
-    },
-    {
-      "time": "2026-08-25T22:00",
-      "temperature_c": 27.1,
-      "feels_like_c": 31.8,
-      "precip_prob_pct": 1,
-      "wind_speed_kmh": 9.1,
-      "wind_dir_deg": 189,
       "wind_gust_kmh": 19.8,
       "weather_code": 0
     },
     {
-      "time": "2026-08-25T23:00",
-      "temperature_c": 26.5,
-      "feels_like_c": 31.0,
+      "time": "2026-08-25T22:00",
+      "temperature_c": 26.6,
+      "feels_like_c": 30.8,
       "precip_prob_pct": 1,
-      "wind_speed_kmh": 8.4,
-      "wind_dir_deg": 200,
-      "wind_gust_kmh": 19.1,
+      "wind_speed_kmh": 10.3,
+      "wind_dir_deg": 192,
+      "wind_gust_kmh": 21.6,
+      "weather_code": 0
+    },
+    {
+      "time": "2026-08-25T23:00",
+      "temperature_c": 26.0,
+      "feels_like_c": 30.3,
+      "precip_prob_pct": 1,
+      "wind_speed_kmh": 8.1,
+      "wind_dir_deg": 201,
+      "wind_gust_kmh": 20.2,
       "weather_code": 0
     }
   ],
@@ -268,8 +268,8 @@
     },
     {
       "date": "2026-08-26",
-      "tmax_c": 33.8,
-      "tmin_c": 24.2,
+      "tmax_c": 35.4,
+      "tmin_c": 23.6,
       "weather_code": 3,
       "precip_prob_pct": 18
     },
